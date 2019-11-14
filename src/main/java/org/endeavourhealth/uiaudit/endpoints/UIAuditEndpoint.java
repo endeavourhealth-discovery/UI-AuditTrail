@@ -1,7 +1,7 @@
-package org.endeavourhealth.audit.endpoints;
+package org.endeavourhealth.uiaudit.endpoints;
 
-import org.endeavourhealth.audit.dal.AuditJDBCDAL;
-import org.endeavourhealth.audit.logic.AuditLogic;
+import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
+import org.endeavourhealth.uiaudit.logic.UIAuditLogic;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +15,15 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Path("/audit")
-public class AuditEndpoint extends AbstractEndpoint {
-    private static final Logger LOG = LoggerFactory.getLogger(AuditEndpoint.class);
+@Path("/uiaudit")
+public class UIAuditEndpoint extends AbstractEndpoint {
+    private static final Logger LOG = LoggerFactory.getLogger(UIAuditEndpoint.class);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/getAudit")
-    public Response getAudit(@Context SecurityContext sc,
+    @Path("/getUIAudit")
+    public Response getUIAudit(@Context SecurityContext sc,
                              @QueryParam("userOrganisationId") String userOrganisationId,
                              @QueryParam("pageNumber") Integer pageNumber,
                              @QueryParam("pageSize") Integer pageSize,
@@ -58,32 +58,32 @@ public class AuditEndpoint extends AbstractEndpoint {
             timestampTo = new Timestamp(parsedDateTo.getTime());
         }
 
-        return new AuditLogic().getAuditEntries(userOrganisationId, pageNumber, pageSize, organisationId, userId, timestampFrom, timestampTo);
+        return new UIAuditLogic().getAuditEntries(userOrganisationId, pageNumber, pageSize, organisationId, userId, timestampFrom, timestampTo);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/getAuditDetail")
-    public Response getAuditDetail(@Context SecurityContext sc,
+    @Path("/getUIAuditDetail")
+    public Response getUIAuditDetail(@Context SecurityContext sc,
                                    @QueryParam("auditId") String auditId) throws Exception {
 
         super.setLogbackMarkers(sc);
 
-        return new AuditLogic().getAuditDetails(auditId);
+        return new UIAuditLogic().getAuditDetails(auditId);
 
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/auditCount")
-    public Response getAuditCount(@Context SecurityContext sc,
+    @Path("/getUIAuditCount")
+    public Response getUIAuditCount(@Context SecurityContext sc,
                                   @QueryParam("userOrganisationId") String userOrganisationId,
                                   @QueryParam("organisationId") String organisationId,
                                   @QueryParam("userId") String userId) throws Exception {
 
-        Long count = new AuditJDBCDAL().getAuditCount(userOrganisationId, organisationId, userId);
+        Long count = new UIAuditJDBCDAL().getAuditCount(userOrganisationId, organisationId, userId);
 
         return Response
                 .ok()

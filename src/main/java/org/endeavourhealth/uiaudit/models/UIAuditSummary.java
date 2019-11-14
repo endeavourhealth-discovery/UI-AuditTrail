@@ -1,17 +1,15 @@
-package org.endeavourhealth.audit.models;
+package org.endeavourhealth.uiaudit.models;
 
-import java.sql.Timestamp;
-
-public class AuditSummary {
+public class UIAuditSummary {
     private String id = null;
     private String userName = null;
-    private String userProject = null;
     private String organisation = null;
+    private String project = null;
     private String timestamp = null;
     private String auditAction = null;
     private String itemType = null;
 
-    public AuditSummary() {
+    public UIAuditSummary() {
     }
 
     public String getId() {
@@ -30,12 +28,12 @@ public class AuditSummary {
         this.userName = userName;
     }
 
-    public String getUserProject() {
-        return userProject;
+    public String getProject() {
+        return project;
     }
 
-    public void setUserProject(String userProject) {
-        this.userProject = userProject;
+    public void setProject(String project) {
+        this.project = project;
     }
 
     public String getOrganisation() {

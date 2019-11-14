@@ -1,61 +1,65 @@
-package org.endeavourhealth.audit.dal;
+package org.endeavourhealth.uiaudit.dal;
 
-import org.endeavourhealth.audit.models.Audit;
-import org.endeavourhealth.audit.models.AuditSummary;
-import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
+import org.endeavourhealth.uiaudit.models.UIAudit;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityDelegationRelationshipDAL;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.AuditEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
+import org.endeavourhealth.uiaudit.models.UIAuditSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.zone.ZoneRules;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AuditJDBCDAL {
-    private static Logger LOG = LoggerFactory.getLogger(AuditJDBCDAL.class);
+public class UIAuditJDBCDAL {
+    private static Logger LOG = LoggerFactory.getLogger(UIAuditJDBCDAL.class);
 
-    public ResultSet getAudit(String userOrganisationId, Integer pageNumber, Integer pageSize,
+    public List<UIAuditSummary> getAudit(String userOrganisationId, Integer pageNumber, Integer pageSize,
                            String organisationId, String userId,
                            Timestamp startDate, Timestamp endDate) throws SQLException, Exception {
 
         List<String> filterOrgs = new ArrayList<>();
 
+        List<UIAuditSummary> auditSummaries = new ArrayList<>();
+
         if (userOrganisationId != null) {
             filterOrgs = getDelegatedOrganisations(userOrganisationId);
         }
 
-        String orderby = " order by a.timestamp desc ";
+        String orderby = " order by a.timestamp desc limit ? offset ? ";
         String whereAnd = " where ";
 
         String sql = "select distinct" +
                 " a.id," +
-                "'f0bc6f4a-8f18-11e8-839e-80fa5b320513' as userProject," + //up.projectId," +
+                " a.user_id," +
                 " a.timestamp," +
-                " a.auditType," +
-                "'c45ccafd-f86a-4778-845a-96269cad6c3d' as organisationId," + // up.organisationId," +
-                "'b786234a-edfd-4424-b87f-d0ea7ee8949b'," + // up.userId," +
-                "'Add' as actionType," + // aa.actionType," +
-                "'User' as itemType" + //  it.itemType" +
-                " from AuditEntity a"
-                   /* +
-                    " join UserProjectEntity up on up.id = a.userProjectId" +
-                    " join AuditActionEntity aa on aa.id = a.auditType" +
-                    " join ItemTypeEntity it on it.id = a.itemType "*/;
+                " a.audit_type," +
+                " a.organisation_id as organisationId," +
+                " a.project_id," +
+                " aa.action_type," +
+                " it.item_type" +
+                " from audit a" +
+                " join audit_action aa on aa.id = a.audit_type" +
+                " join item_type it on it.id = a.item_type ";
 
         if (userOrganisationId != null) {
-            sql += " where up.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
+            sql += " where a.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
             whereAnd = " and ";
         }
 
         if (organisationId != null) {
-            sql +=  whereAnd + " up.organisationId = ?";
+            sql +=  whereAnd + " a.organisationId = ?";
             whereAnd = " and ";
 
             if (userId != null) {
-                sql += " and up.userId = ?";
+                sql += " and a.userId = ?";
             }
         }
 
@@ -95,11 +99,41 @@ public class AuditJDBCDAL {
                 statement.setTimestamp(i++, endDate);
             }
 
+            statement.setInt(i++, pageSize);
+            statement.setInt(i++, ((pageNumber - 1) * pageSize));
+
             try (ResultSet resultSet = statement.executeQuery()) {
 
-                return resultSet;
+
+                while (resultSet.next()) {
+                    UIAuditSummary auditSummary = new UIAuditSummary();
+                    auditSummary.setId(resultSet.getString("id"));
+                    auditSummary.setUserName(resultSet.getString("user_id"));
+                    auditSummary.setProject(resultSet.getString("project_id"));
+                    Date auditTime = resultSet.getTimestamp("timestamp");
+
+                    ZoneId zone = ZoneId.systemDefault();
+                    ZoneRules rules = zone.getRules();
+
+                    LocalDateTime date = auditTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    ZonedDateTime inDST = ZonedDateTime.of(date, zone);
+
+                    if (rules.isDaylightSavings(inDST.toInstant())) {
+                        date = date.plusHours(1);
+                    }
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss");
+                    auditSummary.setTimestamp(date.format(formatter));
+                    auditSummary.setItemType(resultSet.getString("item_type"));
+                    auditSummary.setAuditAction(resultSet.getString("action_type"));
+                    auditSummary.setOrganisation(resultSet.getString("organisationId"));
+
+                    auditSummaries.add(auditSummary);
+                }
 
             }
+
+            return auditSummaries;
 
         } finally {
             ConnectionPool.getInstance().push(conn);
@@ -114,33 +148,32 @@ public class AuditJDBCDAL {
 
         List<String> filterOrgs = new ArrayList<>();
 
-        // get a list of all delegated orgs that this user has access to view audit trail for
+        // get a list of all delegated orgs that this user has access to view uiaudit trail for
         // if userOrganisationId is null, the user must be in god mode so don't limit by organisations
         if (userOrganisationId != null) {
             filterOrgs = getDelegatedOrganisations(userOrganisationId);
         }
 
         String whereAnd = " where ";
-        String sql = "select count (a.id)" +
-                " from AuditEntity a";
+        String sql = "select count(*) as total " +
+                " from audit a";
 
         if (organisationId != null || userOrganisationId != null || userId != null) {
-            sql = "select count (a.id)" +
-                    " from AuditEntity a " +
-                    " join UserProjectEntity up on up.id = a.userProjectId";
+            sql = "select count(*) as total " +
+                    " from audit a ";
 
             if (userId != null) {
-                sql += whereAnd + " up.userId = ?";
+                sql += whereAnd + " a.userId = ?";
                 whereAnd = " and ";
             }
 
             if (!filterOrgs.isEmpty()) {
-                sql += whereAnd + " up.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
+                sql += whereAnd + " a.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
                 whereAnd = " and ";
             }
 
             if (organisationId != null) {
-                sql += whereAnd + " up.organisationId = ?";
+                sql += whereAnd + " a.organisationId = ?";
             }
         }
 
@@ -163,7 +196,8 @@ public class AuditJDBCDAL {
             }
 
             ResultSet rs = statement.executeQuery();
-            long count = (long)rs.getInt(0);
+            rs.next();
+            long count = (long)rs.getInt("total");
 
 
             return count;
@@ -173,19 +207,21 @@ public class AuditJDBCDAL {
         }
     }
 
-    public Audit getAuditDetail(String auditId) throws Exception {
+    public UIAudit getAuditDetail(String auditId) throws Exception {
 
-        Audit auditDetail = null;
+        UIAudit auditDetail = null;
         String sql = "select " +
                 "a.id, " +
-                "a.user_project_id, " +
+                "a.user_id, " +
+                "a.organisation_id, " +
+                "a.project_id, " +
                 "a.timestamp, " +
                 "a.audit_type, " +
                 "a.item_before, " +
                 "a.item_after, " +
                 "a.item_type, " +
-                "a.audit_json, " +
-                " from AuditEntity a " +
+                "a.audit_json " +
+                " from audit a " +
                 " where a.id = ?";
 
         Connection conn = ConnectionPool.getInstance().pop();
@@ -197,9 +233,11 @@ public class AuditJDBCDAL {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     auditDetail =
-                            new Audit()
+                            new UIAudit()
                             .setId(resultSet.getString("id"))
-                            .setUserProjectId(resultSet.getString("userProjectId"))
+                            .setUserId(resultSet.getString("user_id"))
+                            .setOrganisationId(resultSet.getString("organisation_id"))
+                            .setProjectId(resultSet.getString("project_id"))
                             .setTimestamp(resultSet.getTimestamp("timestamp"))
                             .setAuditType(resultSet.getByte("audit_type"))
                             .setItemBefore(resultSet.getString("item_before"))
@@ -219,7 +257,7 @@ public class AuditJDBCDAL {
     private List<String> getDelegatedOrganisations(String userOrganisationId) throws Exception {
 
         List<String> filterOrgs = new ArrayList<String>();
-        // get a list of all delegated orgs that this user has access to view audit trail for
+        // get a list of all delegated orgs that this user has access to view uiaudit trail for
         // if userOrganisationId is null, the user must be in god mode so don't limit by organisations
         if (userOrganisationId != null) {
             List<DelegationRelationshipEntity> relationships = new SecurityDelegationRelationshipDAL().getDelegatedOrganisations(userOrganisationId);

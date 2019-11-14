@@ -1,10 +1,12 @@
-package org.endeavourhealth.audit.models;
+package org.endeavourhealth.uiaudit.models;
 
 import java.sql.Timestamp;
 
-public class Audit {
+public class UIAudit {
     private String id;
-    private String userProjectId;
+    private String userId;
+    private String organisationId;
+    private String projectId;
     private Timestamp timestamp;
     private Byte auditType;
     private String itemBefore;
@@ -17,17 +19,35 @@ public class Audit {
         return id;
     }
 
-    public Audit setId(String id) {
+    public UIAudit setId(String id) {
         this.id = id;
         return this;
     }
 
-    public String getUserProjectId() {
-        return userProjectId;
+    public String getUserId() {
+        return userId;
     }
 
-    public Audit setUserProjectId(String userProjectId) {
-        this.userProjectId = userProjectId;
+    public UIAudit setUserId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public String getOrganisationId() {
+        return organisationId;
+    }
+
+    public UIAudit setOrganisationId(String organisationId) {
+        this.organisationId = organisationId;
+        return this;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public UIAudit setProjectId(String projectId) {
+        this.projectId = projectId;
         return this;
     }
 
@@ -35,7 +55,7 @@ public class Audit {
         return timestamp;
     }
 
-    public Audit setTimestamp(Timestamp timestamp) {
+    public UIAudit setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
         return this;
     }
@@ -44,7 +64,7 @@ public class Audit {
         return auditType;
     }
 
-    public Audit setAuditType(Byte auditType) {
+    public UIAudit setAuditType(Byte auditType) {
         this.auditType = auditType;
         return this;
     }
@@ -53,7 +73,7 @@ public class Audit {
         return itemBefore;
     }
 
-    public Audit setItemBefore(String itemBefore) {
+    public UIAudit setItemBefore(String itemBefore) {
         this.itemBefore = itemBefore;
         return this;
     }
@@ -62,7 +82,7 @@ public class Audit {
         return itemAfter;
     }
 
-    public Audit setItemAfter(String itemAfter) {
+    public UIAudit setItemAfter(String itemAfter) {
         this.itemAfter = itemAfter;
         return this;
     }
@@ -71,7 +91,7 @@ public class Audit {
         return itemType;
     }
 
-    public Audit setItemType(Byte itemType) {
+    public UIAudit setItemType(Byte itemType) {
         this.itemType = itemType;
         return this;
     }
@@ -80,7 +100,7 @@ public class Audit {
         return auditJson;
     }
 
-    public Audit setAuditJson(String auditJson) {
+    public UIAudit setAuditJson(String auditJson) {
         this.auditJson = auditJson;
         return this;
     }

@@ -1,4 +1,4 @@
-package org.endeavourhealth.audit.dal;
+package org.endeavourhealth.uiaudit.dal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,11 +1,11 @@
-package org.endeavourhealth.audit.logic;
+package org.endeavourhealth.uiaudit.logic;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.endeavourhealth.audit.dal.AuditJDBCDAL;
-import org.endeavourhealth.audit.models.Audit;
-import org.endeavourhealth.audit.models.AuditSummary;
+import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
+import org.endeavourhealth.uiaudit.models.UIAudit;
+import org.endeavourhealth.uiaudit.models.UIAuditSummary;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityApplicationPolicyAttributeDAL;
@@ -13,105 +13,45 @@ import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityD
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserProjectDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.*;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.*;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonAuditSummary;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import javax.ws.rs.core.Response;
-import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.zone.ZoneRules;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AuditLogic {
+public class UIAuditLogic {
 
     public Response getAuditEntries(String userOrganisationId, Integer pageNumber, Integer pageSize,
                                      String organisationId, String userId,
                                      Timestamp startDate, Timestamp endDate) throws Exception {
 
-        ResultSet resultSet = new AuditJDBCDAL().getAudit(userOrganisationId, pageNumber, pageSize, organisationId, userId, startDate, endDate);
+        List<UIAuditSummary> auditSummaries = new UIAuditJDBCDAL().getAudit(userOrganisationId, pageNumber, pageSize, organisationId, userId, startDate, endDate);
 
-        List<AuditSummary> auditSummaries = new ArrayList<>();
 
-        while (resultSet.next()) {
-            AuditSummary auditSummary = new AuditSummary();
-            auditSummary.setId(resultSet.getString("id"));
-            auditSummary.setUserProject(resultSet.getString("userProject"));
-            Date auditTime = resultSet.getDate("timestamp");
-
-            ZoneId zone = ZoneId.systemDefault();
-            ZoneRules rules = zone.getRules();
-
-            LocalDateTime date = auditTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            ZonedDateTime inDST = ZonedDateTime.of(date, zone);
-
-            if (rules.isDaylightSavings(inDST.toInstant())) {
-                date = date.plusHours(1);
-            }
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss");
-            auditSummary.setTimestamp(date.format(formatter));
-            auditSummary.setItemType(resultSet.getString("itemType"));
-            auditSummary.setAuditAction(resultSet.getString("actionType"));
-            auditSummary.setOrganisation(resultSet.getString("organisationId"));
-
-            auditSummaries.add(auditSummary);
-        }
-        /*for (Object[] obj : resultSet) {
-            JsonAuditSummary detail = new JsonAuditSummary();
-            detail.setId(obj[0].toString());
-            Date auditTime = (Date)obj[2];
-
-            ZoneId zone = ZoneId.systemDefault();
-            ZoneRules rules = zone.getRules();
-
-            LocalDateTime date = auditTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            ZonedDateTime inDST = ZonedDateTime.of(date, zone);
-
-            if (rules.isDaylightSavings(inDST.toInstant())) {
-                date = date.plusHours(1);
-            }
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss");
-            detail.setTimestamp(date.format(formatter));
-            detail.setUserProject(obj[1].toString());
-            detail.setUserName(obj[5].toString());
-            detail.setOrganisation(obj[4].toString());
-            detail.setAuditAction(obj[6].toString());
-            detail.setItemType(obj[7].toString());
-
-            auditSummaries.add(detail);
-        }*/
-
-        /*if (!resultSet.isEmpty()) {
+        if (!auditSummaries.isEmpty()) {
 
             List<String> orgs = auditSummaries.stream()
-                    .map(JsonAuditSummary::getOrganisation)
+                    .map(UIAuditSummary::getOrganisation)
                     .collect(Collectors.toList());
 
             List<String> projects = auditSummaries.stream()
-                    .map(JsonAuditSummary::getUserProject)
+                    .map(UIAuditSummary::getProject)
                     .collect(Collectors.toList());
 
             List<OrganisationEntity> orgList = OrganisationCache.getOrganisationDetails(orgs);
 
             List<ProjectEntity> projectList = ProjectCache.getProjectDetails(projects);
 
-            for (JsonAuditSummary sum : auditSummaries) {
+            for (UIAuditSummary sum : auditSummaries) {
                 OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
                 if (org != null) {
                     sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
                 }
 
-                ProjectEntity proj = projectList.stream().filter(p -> p.getUuid().equals(sum.getUserProject())).findFirst().orElse(null);
+                ProjectEntity proj = projectList.stream().filter(p -> p.getUuid().equals(sum.getProject())).findFirst().orElse(null);
                 if (proj != null) {
-                    sum.setUserProject(proj.getName());
+                    sum.setProject(proj.getName());
                 }
 
                 UserRepresentation user = UserCache.getUserDetails(sum.getUserName());
@@ -121,7 +61,7 @@ public class AuditLogic {
                     sum.setUserName("Unknown user");
                 }
             }
-        }*/
+        }
 
         return Response
                 .ok()
@@ -133,7 +73,7 @@ public class AuditLogic {
 
 
     public Response getAuditDetails(String auditId) throws Exception {
-        Audit auditEntity = new AuditJDBCDAL().getAuditDetail(auditId);
+        UIAudit auditEntity = new UIAuditJDBCDAL().getAuditDetail(auditId);
 
         switch (auditEntity.getItemType()) {
             case 0: return getJsonForUserProjectAudit(auditEntity); // Role
@@ -148,12 +88,12 @@ public class AuditLogic {
             case 9: return getJsonForUserApplicationPolicyAudit(auditEntity);
             case 10: return getJsonForApplicationPolicyAudit(auditEntity);
             case 11: return getJsonForUserPasswordEmailAudit(auditEntity);
-            default: throw new Exception("Unknown audit type");
+            default: throw new Exception("Unknown uiaudit type");
         }
 
     }
 
-    private Response getJsonForUserAudit(Audit audit) throws Exception {
+    private Response getJsonForUserAudit(UIAudit audit) throws Exception {
 
         return Response
                 .ok()
@@ -161,7 +101,7 @@ public class AuditLogic {
                 .build();
     }
 
-    private Response getJsonForUserPasswordEmailAudit(Audit audit) throws Exception {
+    private Response getJsonForUserPasswordEmailAudit(UIAudit audit) throws Exception {
 
         return Response
                 .ok()
@@ -169,7 +109,7 @@ public class AuditLogic {
                 .build();
     }
 
-    private Response getJsonForDefaltRoleChangeAudit(Audit audit) throws Exception {
+    private Response getJsonForDefaltRoleChangeAudit(UIAudit audit) throws Exception {
 
         return Response
                 .ok()
@@ -177,7 +117,7 @@ public class AuditLogic {
                 .build();
     }
 
-    private Response getJsonForUserRegionAudit(Audit audit) throws Exception {
+    private Response getJsonForUserRegionAudit(UIAudit audit) throws Exception {
 
         return Response
                 .ok()
@@ -185,7 +125,7 @@ public class AuditLogic {
                 .build();
     }
 
-    private Response getJsonForUserApplicationPolicyAudit(Audit audit) throws Exception {
+    private Response getJsonForUserApplicationPolicyAudit(UIAudit audit) throws Exception {
 
         return Response
                 .ok()
@@ -193,7 +133,7 @@ public class AuditLogic {
                 .build();
     }
 
-    private Response getJsonForUserProjectAudit(Audit audit) throws Exception {
+    private Response getJsonForUserProjectAudit(UIAudit audit) throws Exception {
         String title = "";
         UserProjectEntity userProject;
         JsonNode beforeJson = null;
@@ -247,7 +187,7 @@ public class AuditLogic {
         return auditJson;
     }
 
-    private Response getJsonForDelegationRelationshipAudit(Audit audit) throws Exception {
+    private Response getJsonForDelegationRelationshipAudit(UIAudit audit) throws Exception {
         String title = "";
         DelegationRelationshipEntity relationshipBefore;
         DelegationRelationshipEntity relationshipAfter;
@@ -302,7 +242,7 @@ public class AuditLogic {
         return auditJson;
     }
 
-    private Response getJsonForApplicationAudit(Audit audit) throws Exception {
+    private Response getJsonForApplicationAudit(UIAudit audit) throws Exception {
         String title = "";
         ApplicationEntity applicationBefore;
         ApplicationEntity applicationAfter;
@@ -356,7 +296,7 @@ public class AuditLogic {
         return auditJson;
     }
 
-    private Response getJsonForApplicationProfileAudit(Audit audit) throws Exception {
+    private Response getJsonForApplicationProfileAudit(UIAudit audit) throws Exception {
         String title = "";
         ApplicationAccessProfileEntity applicationProfileBefore;
         ApplicationAccessProfileEntity applicationProfileAfter;
@@ -412,7 +352,7 @@ public class AuditLogic {
         return auditJson;
     }
 
-    private Response getJsonForApplicationPolicyAttributeAudit(Audit audit) throws Exception {
+    private Response getJsonForApplicationPolicyAttributeAudit(UIAudit audit) throws Exception {
         String title = "";
         ApplicationPolicyAttributeEntity accessProfileBefore;
         ApplicationPolicyAttributeEntity accessProfileAfter;
@@ -467,7 +407,7 @@ public class AuditLogic {
         return auditJson;
     }
 
-    private Response getJsonForApplicationPolicyAudit(Audit audit) throws Exception {
+    private Response getJsonForApplicationPolicyAudit(UIAudit audit) throws Exception {
         String title = "";
         ApplicationPolicyEntity accessPolicyBefore;
         ApplicationPolicyEntity accessPolicyAfter;
@@ -519,7 +459,7 @@ public class AuditLogic {
         return auditJson;
     }
 
-    private Response getJsonForDelegationAudit(Audit audit) throws Exception {
+    private Response getJsonForDelegationAudit(UIAudit audit) throws Exception {
         String title = "";
         DelegationEntity delegationBefore;
         DelegationEntity delegationAfter;

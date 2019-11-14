@@ -1,4 +1,4 @@
-package org.endeavourhealth.audit.dal;
+package org.endeavourhealth.uiaudit.dal;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.endeavourhealth.common.cache.GenericCache;

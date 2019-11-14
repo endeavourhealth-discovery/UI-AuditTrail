@@ -1,4 +1,4 @@
-package org.endeavourhealth.audit.dal;
+package org.endeavourhealth.uiaudit.dal;
 
 public class DALException extends RuntimeException {
     public DALException(String message) {
