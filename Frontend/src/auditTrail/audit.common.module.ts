@@ -27,6 +27,7 @@ import {AngularDateTimePickerModule} from "angular2-datetimepicker";
   ],
   entryComponents: [
     AuditDetailCommonComponent
-  ]
+  ],
+  exports: [AuditCommonComponent, AuditDetailCommonComponent]
 })
 export class AuditCommonModule { }

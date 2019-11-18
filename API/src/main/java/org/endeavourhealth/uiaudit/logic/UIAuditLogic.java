@@ -46,7 +46,7 @@ public class UIAuditLogic {
             for (UIAuditSummary sum : auditSummaries) {
                 OrganisationEntity org = orgList.stream().filter(o -> o.getUuid().equals(sum.getOrganisation())).findFirst().orElse(null);
                 if (org != null) {
-                    sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")YEAS");
+                    sum.setOrganisation(org.getName() + " (" + org.getOdsCode() + ")");
                 }
 
                 ProjectEntity proj = projectList.stream().filter(p -> p.getUuid().equals(sum.getProject())).findFirst().orElse(null);

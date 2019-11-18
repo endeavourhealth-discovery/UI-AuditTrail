@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
 import {AuditSummary} from "../models/AuditSummary";
-import {LoggerService, UserManagerNotificationService, UserManagerService} from "eds-angular4";
+import {LoggerService, UserManagerNotificationService} from "eds-angular4";
 import {AuditCommonService} from "../audit.common.service";
 import {AuditDetailCommonComponent} from "../audit-detail/audit-detail.common.component";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -9,9 +9,8 @@ import {Organisation} from "eds-angular4/dist/user-manager/models/Organisation";
 import {UserProject} from "eds-angular4/dist/user-manager/models/UserProject";
 
 @Component({
-  selector: 'app-audit',
-  template:
-  `    
+  selector: 'app-audit-common',
+  template: `    
       <loadingIndicator [done]="loadingComplete">
         <div class="row">
           <div class="form-group col-md-3">
@@ -82,7 +81,9 @@ import {UserProject} from "eds-angular4/dist/user-manager/models/UserProject";
       </loadingIndicator>
   `
 })
-export class AuditCommonComponent implements OnInit {
+export class AuditCommonComponent implements OnInit, OnChanges {
+  @Input() userOrganisationId: string;
+
   auditSummaries: AuditSummary[];
   loadingComplete = false;
   totalItems = 5;
@@ -110,41 +111,25 @@ export class AuditCommonComponent implements OnInit {
 
   constructor(private $modal: NgbModal,
               public log:LoggerService,
-              private auditService: AuditCommonService,
-              private userManagerNotificationService: UserManagerNotificationService) { }
+              private auditService: AuditCommonService) { }
 
   ngOnInit() {
-    console.log('in the audit modoule');
     const vm = this;
-    this.userManagerNotificationService.activeUserProject.subscribe(active => {
-        this.activeProject = active;
-        this.roleChanged();
-    });
+    vm.roleChanged();
 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const vm = this;
+    vm.roleChanged();
   }
 
   roleChanged() {
     const vm = this;
-    if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Super User') != null) {
-      vm.admin = true;
-      vm.superUser = true;
-    } else if (vm.activeProject.applicationPolicyAttributes.find(x => x.applicationAccessProfileName == 'Admin') != null) {
-      vm.admin = true;
-      vm.superUser = false;
-    } else {
-      vm.admin = false;
-      vm.superUser = false;
-    }
-
-    console.log('role changing');
 
     vm.getAudit();
     vm.getAuditCount();
-    if (vm.superUser) {
-      vm.getGodModeOrganisations();
-    } else {
-      vm.getDelegatedOrganisations();
-    }
+    vm.getOrganisations(vm.userOrganisationId);
   }
 
   getAudit(){
@@ -164,7 +149,7 @@ export class AuditCommonComponent implements OnInit {
       fromDate = vm.dateFrom;
       toDate = vm.dateTo;
     }
-    vm.auditService.getAuditSummary(vm.superUser ? null : vm.activeProject.organisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
+    vm.auditService.getAuditSummary(vm.userOrganisationId, vm.pageNumber, vm.pageSize, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
           vm.auditSummaries = result;
@@ -185,7 +170,7 @@ export class AuditCommonComponent implements OnInit {
       orgId = vm.selectedOrg.uuid;
       usrId = vm.selectedUser.uuid;
     }
-    vm.auditService.getAuditCount(vm.superUser ? null : vm.activeProject.organisationId, orgId, usrId)
+    vm.auditService.getAuditCount(vm.userOrganisationId, orgId, usrId)
       .subscribe(
         (result) => {
           vm.totalItems = result;
@@ -213,18 +198,7 @@ export class AuditCommonComponent implements OnInit {
     const vm = this;
   }
 
-  getDelegatedOrganisations(){
-    let vm = this;
-    vm.auditService.getOrganisations(vm.activeProject.organisationId)
-      .subscribe(
-        (result) => {
-          vm.delegatedOrganisations = result;
-        },
-        (error) => vm.log.error('Error loading delegated organisations', error, 'Error')
-      );
-  }
-
-  getGodModeOrganisations(){
+  getOrganisations(organisationId : string = null){
     let vm = this;
     vm.auditService.getOrganisations()
       .subscribe(

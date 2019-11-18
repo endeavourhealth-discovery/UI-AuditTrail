@@ -6,9 +6,8 @@ import {AuditSummary} from "../models/AuditSummary";
 import {DisplayDetails} from "../models/DisplayDetails";
 
 @Component({
-  selector: 'app-audit-detail',
-  template:
-  `
+  selector: 'app-audit-common-detail',
+  template: `
       <div class="modal-header">
           <h4 class="modal-title">Audit details</h4>
           <button type="button" class="close" (click)="cancel()" aria-hidden="true">&times;</button>

@@ -54,16 +54,16 @@ public class UIAuditJDBCDAL {
                 " join item_type it on it.id = a.item_type ";
 
         if (userOrganisationId != null) {
-            sql += " where a.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
+            sql += " where a.organisation_id in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
             whereAnd = " and ";
         }
 
         if (organisationId != null) {
-            sql +=  whereAnd + " a.organisationId = ?";
+            sql +=  whereAnd + " a.organisation_id = ?";
             whereAnd = " and ";
 
             if (userId != null) {
-                sql += " and a.userId = ?";
+                sql += " and a.user_id = ?";
             }
         }
 
@@ -165,17 +165,17 @@ public class UIAuditJDBCDAL {
                     " from audit a ";
 
             if (userId != null) {
-                sql += whereAnd + " a.userId = ?";
+                sql += whereAnd + " a.user_id = ?";
                 whereAnd = " and ";
             }
 
             if (!filterOrgs.isEmpty()) {
-                sql += whereAnd + " a.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
+                sql += whereAnd + " a.organisation_id in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
                 whereAnd = " and ";
             }
 
             if (organisationId != null) {
-                sql += whereAnd + " a.organisationId = ?";
+                sql += whereAnd + " a.organisation_id = ?";
             }
         }
 
@@ -228,7 +228,7 @@ public class UIAuditJDBCDAL {
         if (userOrganisationId != null) {
 
             if (!filterOrgs.isEmpty()) {
-                sql += whereAnd + " a.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
+                sql += whereAnd + " a.organisation_id in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
                 whereAnd = " and ";
             }
         }
