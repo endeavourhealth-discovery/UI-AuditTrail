@@ -1,5 +1,7 @@
 package org.endeavourhealth.uiaudit.endpoints;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
 import org.endeavourhealth.uiaudit.logic.UIAuditLogic;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;
@@ -14,6 +16,7 @@ import javax.ws.rs.core.SecurityContext;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Path("/uiaudit")
 public class UIAuditEndpoint extends AbstractEndpoint {
@@ -88,6 +91,36 @@ public class UIAuditEndpoint extends AbstractEndpoint {
         return Response
                 .ok()
                 .entity(count)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getUIAuditUsers")
+    public Response getUIAuditUsers(@Context SecurityContext sc,
+                                    @QueryParam("userOrganisationId") String userOrganisationId) throws Exception {
+
+        List<JsonUser> users = new UIAuditJDBCDAL().getAuditUsers(userOrganisationId);
+
+        return Response
+                .ok()
+                .entity(users)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getUIAuditOrganisations")
+    public Response getUIAuditOrganisations(@Context SecurityContext sc,
+                                    @QueryParam("userOrganisationId") String userOrganisationId) throws Exception {
+
+        List<OrganisationEntity> organisations = new UIAuditJDBCDAL().getAuditOrganisations(userOrganisationId);
+
+        return Response
+                .ok()
+                .entity(organisations)
                 .build();
     }
 }

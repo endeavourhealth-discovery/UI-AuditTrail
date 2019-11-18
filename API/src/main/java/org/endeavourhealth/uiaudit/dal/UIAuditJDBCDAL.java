@@ -1,5 +1,9 @@
 package org.endeavourhealth.uiaudit.dal;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
 import org.endeavourhealth.uiaudit.models.UIAudit;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityDelegationRelationshipDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
@@ -141,8 +145,6 @@ public class UIAuditJDBCDAL {
 
     }
 
-
-
     public long getAuditCount(String userOrganisationId, String organisationId, String userId) throws Exception {
 
 
@@ -181,10 +183,6 @@ public class UIAuditJDBCDAL {
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 
-            if (organisationId != null) {
-                statement.setString(i++, organisationId);
-            }
-
             if (userId != null) {
                 statement.setString(i++, userId);
             }
@@ -195,12 +193,105 @@ public class UIAuditJDBCDAL {
                 }
             }
 
+            if (organisationId != null) {
+                statement.setString(i++, organisationId);
+            }
+
             ResultSet rs = statement.executeQuery();
             rs.next();
             long count = (long)rs.getInt("total");
 
 
             return count;
+
+        } finally {
+            ConnectionPool.getInstance().push(conn);
+        }
+    }
+
+    public List<JsonUser> getAuditUsers(String userOrganisationId) throws Exception {
+
+        List<JsonUser> userList = new ArrayList<>();
+
+        List<String> filterOrgs = new ArrayList<>();
+
+        // get a list of all delegated orgs that this user has access to view uiaudit trail for
+        // if userOrganisationId is null, the user must be in god mode so don't limit by organisations
+        if (userOrganisationId != null) {
+            filterOrgs = getDelegatedOrganisations(userOrganisationId);
+        }
+
+        String whereAnd = " where ";
+        String sql = "select distinct user_id" +
+                " from audit a ";
+
+        if (userOrganisationId != null) {
+
+            if (!filterOrgs.isEmpty()) {
+                sql += whereAnd + " a.organisationId in (" + DALHelper.inListParams(filterOrgs.size()) + ")";
+                whereAnd = " and ";
+            }
+        }
+
+        Connection conn = ConnectionPool.getInstance().pop();
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            int i = 1;
+
+            if (!filterOrgs.isEmpty()) {
+                for (String org : filterOrgs) {
+                    statement.setString(i++, org);
+                }
+            }
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                String userId= null;
+                while (resultSet.next()) {
+                    userId = resultSet.getString("user_id");
+                    userList.add(new JsonUser(UserCache.getUserDetails(userId)));
+
+                }
+
+            }
+            return userList;
+
+        } finally {
+            ConnectionPool.getInstance().push(conn);
+        }
+    }
+
+    public List<OrganisationEntity> getAuditOrganisations(String userOrganisationId) throws Exception {
+
+        List<OrganisationEntity> orgList = new ArrayList<>();
+
+        List<String> filterOrgs = new ArrayList<>();
+
+        // get a list of all delegated orgs that this user has access to view uiaudit trail for
+        // if userOrganisationId is null, the user must be in god mode so don't limit by organisations
+        if (userOrganisationId != null) {
+            filterOrgs = getDelegatedOrganisations(userOrganisationId);
+
+            return orgList = OrganisationCache.getOrganisationDetails(filterOrgs);
+        }
+
+        String whereAnd = " where ";
+        String sql = "select distinct organisation_id " +
+                " from audit a ";
+
+        Connection conn = ConnectionPool.getInstance().pop();
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                String orgId= null;
+                while (resultSet.next()) {
+                    orgId = resultSet.getString("organisation_id");
+                    orgList.add(OrganisationCache.getOrganisationDetails(orgId));
+
+                }
+
+            }
+            return orgList;
 
         } finally {
             ConnectionPool.getInstance().push(conn);
