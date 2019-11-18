@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {AuditSummary} from "../models/AuditSummary";
 import {LoggerService, UserManagerNotificationService, UserManagerService} from "eds-angular4";
-import {AuditService} from "../audit.service";
-import {AuditDetailComponent} from "../audit-detail/audit-detail.component";
+import {AuditCommonService} from "../audit.common.service";
+import {AuditDetailCommonComponent} from "../audit-detail/audit-detail.common.component";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {User} from "../models/User";
 import {Organisation} from "eds-angular4/dist/user-manager/models/Organisation";
@@ -11,11 +11,7 @@ import {UserProject} from "eds-angular4/dist/user-manager/models/UserProject";
 @Component({
   selector: 'app-audit',
   template:
-  `
-    <div class="module">
-  <div class="container-fluid">
-    <div class="module-heading">Audit trail</div>
-    <div class="module-body">
+  `    
       <loadingIndicator [done]="loadingComplete">
         <div class="row">
           <div class="form-group col-md-3">
@@ -84,13 +80,9 @@ import {UserProject} from "eds-angular4/dist/user-manager/models/UserProject";
           </div>
         </div>
       </loadingIndicator>
-    </div>
-  </div>
-</div>
-
   `
 })
-export class AuditComponent implements OnInit {
+export class AuditCommonComponent implements OnInit {
   auditSummaries: AuditSummary[];
   loadingComplete = false;
   totalItems = 5;
@@ -118,10 +110,11 @@ export class AuditComponent implements OnInit {
 
   constructor(private $modal: NgbModal,
               public log:LoggerService,
-              private auditService: AuditService,
+              private auditService: AuditCommonService,
               private userManagerNotificationService: UserManagerNotificationService) { }
 
   ngOnInit() {
+    console.log('in the audit modoule');
     const vm = this;
     this.userManagerNotificationService.activeUserProject.subscribe(active => {
         this.activeProject = active;
@@ -142,6 +135,8 @@ export class AuditComponent implements OnInit {
       vm.admin = false;
       vm.superUser = false;
     }
+
+    console.log('role changing');
 
     vm.getAudit();
     vm.getAuditCount();
@@ -201,7 +196,7 @@ export class AuditComponent implements OnInit {
 
   showDetails(audit: AuditSummary) {
     const vm = this;
-    AuditDetailComponent.open(vm.$modal, audit)
+    AuditDetailCommonComponent.open(vm.$modal, audit)
       .result.then(function
         (result: boolean) {
           return;

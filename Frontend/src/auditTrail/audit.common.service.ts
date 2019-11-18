@@ -7,7 +7,7 @@ import {User} from "./models/User";
 import {Organisation} from "eds-angular4/dist/user-manager/models/Organisation";
 
 @Injectable()
-export class AuditService {
+export class AuditCommonService {
 
   constructor(private http: Http,
               private datePipe: DatePipe) { }

@@ -1,1 +1,1 @@
-export { AuditModule } from './audit.module';
+export { AuditCommonModule } from './audit.common.module';

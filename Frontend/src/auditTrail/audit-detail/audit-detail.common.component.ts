@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {LoggerService} from "eds-angular4";
-import {AuditService} from "../audit.service";
+import {AuditCommonService} from "../audit.common.service";
 import {NgbModal, NgbActiveModal, NgbModalOptions, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {AuditSummary} from "../models/AuditSummary";
 import {DisplayDetails} from "../models/DisplayDetails";
@@ -54,14 +54,14 @@ import {DisplayDetails} from "../models/DisplayDetails";
       </div>
   `
 })
-export class AuditDetailComponent implements OnInit {
+export class AuditDetailCommonComponent implements OnInit {
   audit: AuditSummary;
   auditDetails: any;
   displayItems: any;
 
   constructor(public activeModal: NgbActiveModal,
               public log:LoggerService,
-              private auditService: AuditService) { }
+              private auditService: AuditCommonService) { }
 
   ngOnInit() {
     const vm = this;
@@ -81,7 +81,7 @@ export class AuditDetailComponent implements OnInit {
       }
     }
 
-    const modalRef = modalService.open(AuditDetailComponent, options);
+    const modalRef = modalService.open(AuditDetailCommonComponent, options);
     modalRef.componentInstance.audit = audit;
 
     return modalRef;

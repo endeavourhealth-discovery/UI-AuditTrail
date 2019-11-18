@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
-import { AuditComponent } from './audit/audit.component';
+import { AuditCommonComponent } from './audit/audit.common.component';
 import {FormsModule} from "@angular/forms";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ControlsModule} from "eds-angular4/dist/controls";
 import {DialogsModule} from "eds-angular4";
-import {AuditService} from "./audit.service";
-import { AuditDetailComponent } from './audit-detail/audit-detail.component';
+import {AuditCommonService} from "./audit.common.service";
+import { AuditDetailCommonComponent } from './audit-detail/audit-detail.common.component';
 import {NgxPaginationModule} from "ngx-pagination";
 import {AngularDateTimePickerModule} from "angular2-datetimepicker";
 
@@ -20,13 +20,13 @@ import {AngularDateTimePickerModule} from "angular2-datetimepicker";
     NgxPaginationModule,
     AngularDateTimePickerModule
   ],
-  declarations: [AuditComponent, AuditDetailComponent],
+  declarations: [AuditCommonComponent, AuditDetailCommonComponent],
   providers: [
-    AuditService,
+    AuditCommonService,
     DatePipe
   ],
   entryComponents: [
-    AuditDetailComponent
+    AuditDetailCommonComponent
   ]
 })
-export class AuditModule { }
+export class AuditCommonModule { }
