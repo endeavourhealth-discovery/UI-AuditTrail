@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
 import {AuditSummary} from "../models/AuditSummary";
-import {LoggerService, UserManagerNotificationService} from "eds-angular4";
+import {LoggerService} from "eds-angular4";
 import {AuditCommonService} from "../audit.common.service";
 import {AuditDetailCommonComponent} from "../audit-detail/audit-detail.common.component";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';

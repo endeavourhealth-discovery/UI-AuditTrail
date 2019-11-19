@@ -3,7 +3,10 @@ package org.endeavourhealth.uiaudit.dal;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
+import org.endeavourhealth.uiaudit.enums.AuditAction;
+import org.endeavourhealth.uiaudit.enums.ItemType;
 import org.endeavourhealth.uiaudit.models.UIAudit;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityDelegationRelationshipDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
@@ -20,6 +23,7 @@ import java.time.zone.ZoneRules;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UIAuditJDBCDAL {
@@ -361,5 +365,35 @@ public class UIAuditJDBCDAL {
         }
 
         return filterOrgs;
+    }
+
+    public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
+                                String itemBefore, String itemAfter, String auditJson) throws Exception {
+
+        UserProjectEntity userProject = UserCache.getUserProject(userProjectId);
+
+        String sql = "insert into audit (id, timestamp, audit_type, item_type, item_before, " +
+                " item_after, audit_json, user_id, organisation_id, project_id) " +
+                " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+
+        Connection conn = ConnectionPool.getInstance().pop();
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            int i = 1;
+
+            statement.setString(i++, UUID.randomUUID().toString());
+            statement.setTimestamp(i++, new Timestamp(System.currentTimeMillis()));
+            statement.setByte(i++, auditAction.getAuditAction().byteValue());
+            statement.setByte(i++, itemType.getItemType().byteValue());
+            statement.setString(i++, itemBefore);
+            statement.setString(i++, itemAfter);
+            statement.setString(i++, auditJson);
+            statement.setString(i++, userProject.getUserId());
+            statement.setString(i++, userProject.getOrganisationId());
+            statement.setString(i++, userProject.getProjectId());
+
+            statement.execute();
+        } finally {
+            ConnectionPool.getInstance().push(conn);
+        }
     }
 }
