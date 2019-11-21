@@ -20,4 +20,6 @@ values
 (8, 'User region'),
 (9, 'User application policy'),
 (10, 'Application policy'),
-(11, 'User Password Email');
+(11, 'User Password Email'),
+(12, 'Project'),
+(13, 'Cohort');

@@ -88,6 +88,7 @@ public class UIAuditLogic {
             case 9: return getJsonForUserApplicationPolicyAudit(auditEntity);
             case 10: return getJsonForApplicationPolicyAudit(auditEntity);
             case 11: return getJsonForUserPasswordEmailAudit(auditEntity);
+            case 13: return getJsonForCohortAudit(auditEntity);
             default: throw new Exception("Unknown uiaudit type");
         }
 
@@ -102,6 +103,14 @@ public class UIAuditLogic {
     }
 
     private Response getJsonForUserPasswordEmailAudit(UIAudit audit) throws Exception {
+
+        return Response
+                .ok()
+                .entity(audit.getAuditJson())
+                .build();
+    }
+
+    private Response getJsonForCohortAudit(UIAudit audit) throws Exception {
 
         return Response
                 .ok()

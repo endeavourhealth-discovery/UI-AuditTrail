@@ -106,4 +106,14 @@ export class DisplayDetails {
       { label: 'E-mail', property: 'email'}
     ]
   }
+
+  getCohortDisplayDetails(): any[] {
+      return [
+          { label: 'Id', property: 'uuid'},
+          { label: 'Name', property: 'name'},
+          { label: 'Consent model', property: 'consentModel'},
+          { label: 'Description', property: 'description'},
+          { label: 'Technical definition', property: 'technicalDefinition'}
+      ]
+  }
 }

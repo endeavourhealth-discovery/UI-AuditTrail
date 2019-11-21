@@ -125,6 +125,7 @@ export class AuditDetailCommonComponent implements OnInit {
       case "User application policy": return dd.getUserApplicationPolicyDisplayDetails();
       case "Application policy": return dd.getApplicationPolicyDisplayDetails();
       case "User Password Email": return dd.getUserPasswordDisplayDetails();
+      case "Cohort": return dd.getCohortDisplayDetails();
     }
   }
 
