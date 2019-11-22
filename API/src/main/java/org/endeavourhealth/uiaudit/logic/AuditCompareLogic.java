@@ -12,29 +12,60 @@ import java.util.List;
 public class AuditCompareLogic {
 
     public String getAuditJson(String title, Object oldObject, Object newObject) throws Exception {
-        List<AuditDifference> differences = compareFields(oldObject, newObject);
+        List<AuditDifference> differences;
+
+        if (oldObject != null && newObject != null) {
+            differences = createDifferenceList(oldObject, newObject);
+        } else if (oldObject != null) {
+            differences = createDifferenceList(oldObject, false);
+        } else if (newObject != null) {
+            differences = createDifferenceList(newObject, true);
+        } else {
+            throw new Exception("Old and new objects both null - nothing to compare.");
+        }
 
         return generateAuditJson(title, differences);
-
-
     }
 
-    private List<AuditDifference> compareFields(Object oldObject, Object newObject) throws Exception {
+    private List<AuditDifference> createDifferenceList(Object oldObject, Object newObject) throws Exception {
+        if (!oldObject.getClass().equals(newObject.getClass())) {
+            throw new Exception("Cannot compare fields in objects of different types.");
+        }
+
         List<AuditDifference> differenceList = new ArrayList<AuditDifference>();
         Field[] fields = oldObject.getClass().getDeclaredFields();
 
-        for(Field field : fields){
+        for (Field field : fields) {
             field.setAccessible(true);
 
             AuditDifference difference = new AuditDifference();
             difference.setFieldName(field.getName());
-            if(!field.get(oldObject).equals(field.get(newObject))) {
+            if (!field.get(oldObject).equals(field.get(newObject))) {
                 difference.setOldValue(field.get(oldObject).toString());
             }
             difference.setNewValue(field.get(newObject).toString());
             differenceList.add(difference);
             System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
 
+        }
+        return differenceList;
+    }
+
+    private List<AuditDifference> createDifferenceList(Object object, boolean isNew) throws Exception {
+        List<AuditDifference> differenceList = new ArrayList<AuditDifference>();
+        Field[] fields = object.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            field.setAccessible(true);
+
+            AuditDifference difference = new AuditDifference();
+            difference.setFieldName(field.getName());
+            if (isNew) {
+                difference.setNewValue(field.get(object).toString());
+            }else {
+                difference.setOldValue(field.get(object).toString());
+            }
+            differenceList.add(difference);
         }
         return differenceList;
     }
