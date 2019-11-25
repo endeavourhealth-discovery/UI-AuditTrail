@@ -11,7 +11,7 @@
 
     <groupId>org.endeavourhealth.UI-AuditTrail</groupId>
     <artifactId>API</artifactId>
-    <version>1.61-SNAPSHOT</version>
+    <version>1.63-SNAPSHOT</version>
 
     <properties>
         <java.version>1.8</java.version>
