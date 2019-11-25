@@ -36,14 +36,16 @@ public class AuditCompareLogic {
         Field[] fields = oldObject.getClass().getDeclaredFields();
 
         for (Field field : fields) {
-            field.setAccessible(true);
-
             AuditDifference difference = new AuditDifference();
             difference.setFieldName(field.getName());
-            if (!field.get(oldObject).equals(field.get(newObject))) {
-                difference.setOldValue(field.get(oldObject) != null ? field.get(oldObject).toString() : "");
+
+            String oldValue = getValueOrEmptyString(oldObject, field);
+            String newValue = getValueOrEmptyString(newObject, field);
+
+            if (!oldValue.equals(newValue)) {
+                difference.setOldValue(oldValue);
             }
-            difference.setNewValue(field.get(newObject) != null ? field.get(newObject).toString() : "");
+            difference.setNewValue(newValue);
             differenceList.add(difference);
             //System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
 
@@ -56,14 +58,12 @@ public class AuditCompareLogic {
         Field[] fields = object.getClass().getDeclaredFields();
 
         for (Field field : fields) {
-            field.setAccessible(true);
-
             AuditDifference difference = new AuditDifference();
             difference.setFieldName(field.getName());
             if (isNew) {
-                difference.setNewValue(field.get(object) != null ? field.get(object).toString() : "");
-            }else {
-                difference.setOldValue(field.get(object) != null ? field.get(object).toString() : "");
+                difference.setNewValue(getValueOrEmptyString(object, field));
+            } else {
+                difference.setOldValue(getValueOrEmptyString(object, field));
             }
             differenceList.add(difference);
         }
@@ -74,18 +74,18 @@ public class AuditCompareLogic {
         List<AuditDifference> differenceList = new ArrayList<AuditDifference>();
         Field[] fields = oldObject.getClass().getDeclaredFields();
 
-        for(Field field : fields){
+        for (Field field : fields) {
             field.setAccessible(true);
             System.out.println(field.getName());
             System.out.println(field.get(oldObject).toString());
             System.out.println(field.get(newObject).toString());
             // if(!field.get(oldObject).equals(field.get(newObject))){
-                AuditDifference difference = new AuditDifference();
-                difference.setFieldName(field.getName());
-                difference.setOldValue(field.get(oldObject).toString());
-                difference.setNewValue(field.get(newObject).toString());
-                differenceList.add(difference);
-                System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
+            AuditDifference difference = new AuditDifference();
+            difference.setFieldName(field.getName());
+            difference.setOldValue(field.get(oldObject).toString());
+            difference.setNewValue(field.get(newObject).toString());
+            differenceList.add(difference);
+            System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
             // }
         }
         return differenceList;
@@ -98,8 +98,8 @@ public class AuditCompareLogic {
         JsonNode afterJson = mapper.createObjectNode();
 
         for (AuditDifference dif : differences) {
-            ((ObjectNode)beforeJson).put(dif.getFieldName(), dif.getOldValue());
-            ((ObjectNode)afterJson).put(dif.getFieldName(), dif.getNewValue());
+            ((ObjectNode) beforeJson).put(dif.getFieldName(), dif.getOldValue());
+            ((ObjectNode) afterJson).put(dif.getFieldName(), dif.getNewValue());
         }
         /*if (oldPolicy != null) {
             beforeJson = generateAppplicationPolicyChangeJson(oldPolicy);
@@ -107,7 +107,7 @@ public class AuditCompareLogic {
 
         JsonNode rootNode = mapper.createObjectNode();
 
-        ((ObjectNode)rootNode).put("title", title);
+        ((ObjectNode) rootNode).put("title", title);
 
         if (afterJson != null) {
             ((ObjectNode) rootNode).set("after", afterJson);
@@ -126,9 +126,18 @@ public class AuditCompareLogic {
             Object json = mapper.readValue(jsonNode.toString(), Object.class);
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
         } catch (Exception e) {
-            throw new Exception("Converting Json to String failed : " + e.getMessage() );
+            throw new Exception("Converting Json to String failed : " + e.getMessage());
         }
     }
 
+    private String getValueOrEmptyString(Object object, Field field) throws IllegalAccessException {
+        //field.setAccessible(true);
+        Object value = field.get(object);
+        if (object == null) {
+            return "";
+        } else {
+            return value.toString();
+        }
+    }
 
 }
