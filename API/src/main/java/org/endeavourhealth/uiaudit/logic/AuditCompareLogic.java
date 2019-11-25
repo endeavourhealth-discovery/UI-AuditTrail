@@ -41,11 +41,11 @@ public class AuditCompareLogic {
             AuditDifference difference = new AuditDifference();
             difference.setFieldName(field.getName());
             if (!field.get(oldObject).equals(field.get(newObject))) {
-                difference.setOldValue(field.get(oldObject).toString());
+                difference.setOldValue(field.get(oldObject) != null ? field.get(oldObject).toString() : "");
             }
-            difference.setNewValue(field.get(newObject).toString());
+            difference.setNewValue(field.get(newObject) != null ? field.get(newObject).toString() : "");
             differenceList.add(difference);
-            System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
+            //System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
 
         }
         return differenceList;
@@ -61,9 +61,9 @@ public class AuditCompareLogic {
             AuditDifference difference = new AuditDifference();
             difference.setFieldName(field.getName());
             if (isNew) {
-                difference.setNewValue(field.get(object).toString());
+                difference.setNewValue(field.get(object) != null ? field.get(object).toString() : "");
             }else {
-                difference.setOldValue(field.get(object).toString());
+                difference.setOldValue(field.get(object) != null ? field.get(object).toString() : "");
             }
             differenceList.add(difference);
         }
