@@ -131,7 +131,7 @@ public class AuditCompareLogic {
     }
 
     private String getValueOrEmptyString(Object object, Field field) throws IllegalAccessException {
-        //field.setAccessible(true);
+        field.setAccessible(true);
         Object value = field.get(object);
         if (object == null) {
             return "";
