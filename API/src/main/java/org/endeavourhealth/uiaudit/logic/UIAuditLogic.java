@@ -77,64 +77,18 @@ public class UIAuditLogic {
 
         switch (auditEntity.getItemType()) {
             case 0: return getJsonForUserProjectAudit(auditEntity); // Role
-            case 1: return getJsonForUserAudit(auditEntity);
             case 2: return getJsonForDelegationAudit(auditEntity);
             case 3: return getJsonForDelegationRelationshipAudit(auditEntity);
-            case 4: return getJsonForDefaltRoleChangeAudit(auditEntity);
             case 5: return getJsonForApplicationAudit(auditEntity);
             case 6: return getJsonForApplicationProfileAudit(auditEntity);
             case 7: return getJsonForApplicationPolicyAttributeAudit(auditEntity);
-            case 8: return getJsonForUserRegionAudit(auditEntity);
-            case 9: return getJsonForUserApplicationPolicyAudit(auditEntity);
             case 10: return getJsonForApplicationPolicyAudit(auditEntity);
-            case 11: return getJsonForUserPasswordEmailAudit(auditEntity);
-            case 13: return getJsonForCohortAudit(auditEntity);
-            default: throw new Exception("Unknown uiaudit type");
+            default: return getJsonForDefaultAudit(auditEntity);
         }
 
     }
 
-    private Response getJsonForUserAudit(UIAudit audit) throws Exception {
-
-        return Response
-                .ok()
-                .entity(audit.getAuditJson())
-                .build();
-    }
-
-    private Response getJsonForUserPasswordEmailAudit(UIAudit audit) throws Exception {
-
-        return Response
-                .ok()
-                .entity(audit.getAuditJson())
-                .build();
-    }
-
-    private Response getJsonForCohortAudit(UIAudit audit) throws Exception {
-
-        return Response
-                .ok()
-                .entity(audit.getAuditJson())
-                .build();
-    }
-
-    private Response getJsonForDefaltRoleChangeAudit(UIAudit audit) throws Exception {
-
-        return Response
-                .ok()
-                .entity(audit.getAuditJson())
-                .build();
-    }
-
-    private Response getJsonForUserRegionAudit(UIAudit audit) throws Exception {
-
-        return Response
-                .ok()
-                .entity(audit.getAuditJson())
-                .build();
-    }
-
-    private Response getJsonForUserApplicationPolicyAudit(UIAudit audit) throws Exception {
+    private Response getJsonForDefaultAudit(UIAudit audit) throws Exception {
 
         return Response
                 .ok()

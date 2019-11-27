@@ -14,7 +14,13 @@ public enum ItemType {
     APPLICATION_POLICY((short)10),
     USER_PASSWORD_EMAIL((short)11),
     PROJECT((short)12),
-    COHORT((short)13);
+    COHORT((short)13),
+    REGION((short)14),
+    ORGANISATION((short)15),
+    SERVICE((short)16),
+    DPA((short)17),
+    DSA((short)18),
+    DATASET((short)19);
 
     private Short itemType;
 

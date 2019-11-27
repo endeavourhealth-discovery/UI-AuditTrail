@@ -22,4 +22,10 @@ values
 (10, 'Application policy'),
 (11, 'User Password Email'),
 (12, 'Project'),
-(13, 'Cohort');
+(13, 'Cohort'),
+(14, 'Region'),
+(15, 'Organisation'),
+(16, 'Service'),
+(17, 'Data processing agreement'),
+(18, 'Data sharing agreement'),
+(19, 'Data set');

@@ -117,4 +117,14 @@ export class DisplayDetails {
           { label: 'Linked Data Processing Agreements', property: 'dpas'}
       ]
   }
+
+    getDataSetDisplayDetails(): any[] {
+        return [
+            { label: 'Id', property: 'uuid'},
+            { label: 'Name', property: 'name'},
+            { label: 'Description', property: 'description'},
+            { label: 'Technical definition', property: 'technicalDefinition'},
+            { label: 'Linked Data Processing Agreements', property: 'dpas'}
+        ]
+    }
 }
