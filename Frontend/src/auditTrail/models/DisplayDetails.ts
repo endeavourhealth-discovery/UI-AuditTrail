@@ -113,7 +113,8 @@ export class DisplayDetails {
           { label: 'Name', property: 'name'},
           { label: 'Consent model', property: 'consentModel'},
           { label: 'Description', property: 'description'},
-          { label: 'Technical definition', property: 'technicalDefinition'}
+          { label: 'Technical definition', property: 'technicalDefinition'},
+          { label: 'Linked Data Processing Agreements', property: 'dpas'}
       ]
   }
 }
