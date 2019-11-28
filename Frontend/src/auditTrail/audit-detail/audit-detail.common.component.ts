@@ -20,30 +20,45 @@ import {DisplayDetails} from "../models/DisplayDetails";
                           <h2>{{auditDetails?.title}}</h2>
                       </div>
                   </div>
-                  <div class="row">
-                      <div class="col-md-12">
-                          <div class="scroll-box-500">
-                              <table class="table table-striped table-sm">
-                                  <thead>
-                                  <tr>
-                                      <th></th>
-                                      <th *ngIf="auditDetails.before">Previous</th>
-                                      <th *ngIf="auditDetails.after">Current</th>
-                                  </tr>
-                                  </thead>
-
-                                  <tbody>
-                                  <tr *ngFor="let display of displayItems" class="hover-box show-child-on-hover">
-
-                                      <td><strong>{{display.label}}</strong></td>
-                                      <td *ngIf="auditDetails.before">{{auditDetails.before[display.property]}}</td>
-                                      <td *ngIf="auditDetails.after">{{auditDetails.after[display.property]}}</td>
-
-                                  </tr>
-                                  </tbody>
-                              </table>
-                          </div>
-                      </div>
+                  <div class="scroll-box-500">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th *ngIf="auditDetails.before">Previous</th>
+                                    <th *ngIf="auditDetails.after">Current</th>
+                                </tr>
+                                </thead>
+  
+                                <tbody>
+                                <tr *ngFor="let display of displayItems" class="hover-box show-child-on-hover">
+  
+                                    <td><strong>{{display.label}}</strong></td>
+                                    <td *ngIf="auditDetails.before">{{auditDetails.before[display.property]}}</td>
+                                    <td *ngIf="auditDetails.after">{{auditDetails.after[display.property]}}</td>
+  
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-sm">
+  
+                                <tbody>
+                                <tr *ngFor="let link of changeLinkedItems" class="hover-box show-child-on-hover">
+  
+                                    <td *ngIf="auditDetails[link.property]"><strong>{{link.label}}</strong></td>
+                                    <td *ngIf="auditDetails[link.property]">{{auditDetails[link.property]}}</td>
+  
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                   </div>
               </form>
           </div>
@@ -57,6 +72,8 @@ export class AuditDetailCommonComponent implements OnInit {
   audit: AuditSummary;
   auditDetails: any;
   displayItems: any;
+  changeLinkedItems: any;
+
 
   constructor(public activeModal: NgbActiveModal,
               public log:LoggerService,
@@ -65,6 +82,7 @@ export class AuditDetailCommonComponent implements OnInit {
   ngOnInit() {
     const vm = this;
     vm.displayItems = vm.getDetailsToShow(vm.audit.itemType);
+    vm.changeLinkedItems = vm.getDetailsToShow('Linked Items');
     vm.getDetails();
   }
 
@@ -113,6 +131,7 @@ export class AuditDetailCommonComponent implements OnInit {
   getDetailsToShow(itemType: string) {
     const dd = new DisplayDetails();
     switch (itemType) {
+      case "Linked Items": return dd.getChangedLinkedItemsDisplayDetails();
       case "User project": return dd.getUserProjectDisplayDetails();
       case "User": return dd.getUserDisplayDetails();
       case "Delegation": return dd.getDelegationDisplayDetails();
@@ -126,7 +145,7 @@ export class AuditDetailCommonComponent implements OnInit {
       case "Application policy": return dd.getApplicationPolicyDisplayDetails();
       case "User Password Email": return dd.getUserPasswordDisplayDetails();
       case "Cohort": return dd.getCohortDisplayDetails();
-        case "Data set": return dd.getCohortDisplayDetails();
+      case "Data set": return dd.getCohortDisplayDetails();
     }
   }
 

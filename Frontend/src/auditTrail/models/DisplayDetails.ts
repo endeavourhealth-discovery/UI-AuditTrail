@@ -1,5 +1,12 @@
 export class DisplayDetails {
 
+    getChangedLinkedItemsDisplayDetails(): any[] {
+        return [
+            { label: 'Added data processing agreements', property: 'AddedDPAs'},
+            { label: 'Removed data processing agreements', property: 'RemovedDPAs'}
+        ]
+    }
+
   getUserProjectDisplayDetails(): any[] {
     return [
       { label: 'User', property: 'userId'},
@@ -111,10 +118,9 @@ export class DisplayDetails {
       return [
           { label: 'Id', property: 'uuid'},
           { label: 'Name', property: 'name'},
-          { label: 'Consent model', property: 'consentModel'},
+          { label: 'Consent model', property: 'consentModelId'},
           { label: 'Description', property: 'description'},
-          { label: 'Technical definition', property: 'technicalDefinition'},
-          { label: 'Linked Data Processing Agreements', property: 'dpas'}
+          { label: 'Technical definition', property: 'technicalDefinition'}
       ]
   }
 
@@ -123,8 +129,7 @@ export class DisplayDetails {
             { label: 'Id', property: 'uuid'},
             { label: 'Name', property: 'name'},
             { label: 'Description', property: 'description'},
-            { label: 'Technical definition', property: 'technicalDefinition'},
-            { label: 'Linked Data Processing Agreements', property: 'dpas'}
+            { label: 'Technical definition', property: 'technicalDefinition'}
         ]
     }
 }

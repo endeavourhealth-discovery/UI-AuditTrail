@@ -3,15 +3,22 @@ package org.endeavourhealth.uiaudit.logic;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.endeavourhealth.uiaudit.dal.DALHelper;
 import org.endeavourhealth.uiaudit.models.AuditDifference;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class AuditCompareLogic {
 
     public String getAuditJson(String title, Object oldObject, Object newObject) throws Exception {
+        JsonNode auditNode = getAuditJsonNode(title, oldObject, newObject);
+
+        return DALHelper.prettyPrintJsonString(auditNode);
+    }
+    public JsonNode getAuditJsonNode(String title, Object oldObject, Object newObject) throws Exception {
         List<AuditDifference> differences;
 
         if (oldObject != null && newObject != null) {
@@ -36,7 +43,11 @@ public class AuditCompareLogic {
         Field[] fields = oldObject.getClass().getDeclaredFields();
 
         for (Field field : fields) {
+            if (Collection.class.isAssignableFrom(field.getType())) {
+                continue;
+            }
             AuditDifference difference = new AuditDifference();
+
             difference.setFieldName(field.getName());
 
             String oldValue = getValueOrEmptyString(oldObject, field);
@@ -47,7 +58,6 @@ public class AuditCompareLogic {
             }
             difference.setNewValue(newValue);
             differenceList.add(difference);
-            //System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
 
         }
         return differenceList;
@@ -58,7 +68,11 @@ public class AuditCompareLogic {
         Field[] fields = object.getClass().getDeclaredFields();
 
         for (Field field : fields) {
+            if (Collection.class.isAssignableFrom(field.getType())) {
+                continue;
+            }
             AuditDifference difference = new AuditDifference();
+
             difference.setFieldName(field.getName());
             if (isNew) {
                 difference.setNewValue(getValueOrEmptyString(object, field));
@@ -85,13 +99,12 @@ public class AuditCompareLogic {
             difference.setOldValue(field.get(oldObject).toString());
             difference.setNewValue(field.get(newObject).toString());
             differenceList.add(difference);
-            System.out.println(field.getName() + " Changed: " + field.get(oldObject).toString() + " to " + field.get(newObject).toString());
             // }
         }
         return differenceList;
     }
 
-    private String generateAuditJson(String title, List<AuditDifference> differences) throws Exception {
+    private JsonNode generateAuditJson(String title, List<AuditDifference> differences) throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode beforeJson = mapper.createObjectNode();
@@ -101,9 +114,6 @@ public class AuditCompareLogic {
             ((ObjectNode) beforeJson).put(dif.getFieldName(), dif.getOldValue());
             ((ObjectNode) afterJson).put(dif.getFieldName(), dif.getNewValue());
         }
-        /*if (oldPolicy != null) {
-            beforeJson = generateAppplicationPolicyChangeJson(oldPolicy);
-        }*/
 
         JsonNode rootNode = mapper.createObjectNode();
 
@@ -117,17 +127,18 @@ public class AuditCompareLogic {
             ((ObjectNode) rootNode).set("before", beforeJson);
         }
 
-        return prettyPrintJsonString(rootNode);
+        return rootNode;
     }
 
-    private static String prettyPrintJsonString(JsonNode jsonNode) throws Exception {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Object json = mapper.readValue(jsonNode.toString(), Object.class);
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-        } catch (Exception e) {
-            throw new Exception("Converting Json to String failed : " + e.getMessage());
+    public JsonNode generateListDifferenceAuditJson(JsonNode auditJson, String fieldName, List<String> changedItems, String type) throws Exception {
+
+        changedItems = EntityNameGetter.replaceUUIDsWithName(type, changedItems);
+
+        for (String item : changedItems) {
+            ((ObjectNode) auditJson).put(fieldName, item);
         }
+
+        return auditJson;
     }
 
     private String getValueOrEmptyString(Object object, Field field) throws IllegalAccessException {

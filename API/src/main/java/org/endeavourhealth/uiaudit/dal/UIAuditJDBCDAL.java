@@ -1,5 +1,6 @@
 package org.endeavourhealth.uiaudit.dal;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
@@ -365,6 +366,11 @@ public class UIAuditJDBCDAL {
         }
 
         return filterOrgs;
+    }
+
+    public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
+                                String itemBefore, String itemAfter, JsonNode auditJson) throws Exception {
+        addToAuditTrail(userProjectId, auditAction, itemType, itemBefore, itemAfter, DALHelper.prettyPrintJsonString(auditJson));
     }
 
     public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
