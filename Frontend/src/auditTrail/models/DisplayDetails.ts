@@ -2,8 +2,36 @@ export class DisplayDetails {
 
     getChangedLinkedItemsDisplayDetails(): any[] {
         return [
-            { label: 'Added data processing agreements', property: 'AddedDPAs'},
-            { label: 'Removed data processing agreements', property: 'RemovedDPAs'}
+            { label: 'Added organisation', property: 'AddedORGANISATION'},
+            { label: 'Removed organisation', property: 'RemovedORGANISATION'},
+            { label: 'Added data processing agreements', property: 'AddedDATAPROCESSINGAGREEMENT'},
+            { label: 'Removed data processing agreements', property: 'RemovedDATAPROCESSINGAGREEMENT'},
+            { label: 'Added service', property: 'AddedSERVICE'},
+            { label: 'Removed service', property: 'RemovedSERVICE'},
+            { label: 'Added region', property: 'AddedREGION'},
+            { label: 'Removed region', property: 'RemovedREGION'},
+            { label: 'Added data sharing agreement', property: 'AddedDATASHARINGAGREEMENT'},
+            { label: 'Removed data sharing agreement', property: 'RemovedDATASHARINGAGREEMENT'},
+            { label: 'Added cohort', property: 'AddedCOHORT'},
+            { label: 'Removed cohort', property: 'RemovedCOHORT'},
+            { label: 'Added dataset', property: 'AddedDATASET'},
+            { label: 'Removed dataset', property: 'RemovedDATASET'},
+            { label: 'Added publisher', property: 'AddedPUBLISHER'},
+            { label: 'Removed publisher', property: 'RemovedPUBLISHER'},
+            { label: 'Added subscriber', property: 'AddedSUBSCRIBER'},
+            { label: 'Removed subscriber', property: 'RemovedSUBSCRIBER'},
+            { label: 'Added purpose', property: 'AddedPURPOSE'},
+            { label: 'Removed purpose', property: 'RemovedPURPOSE'},
+            { label: 'Added benefit', property: 'AddedBENEFIT'},
+            { label: 'Removed benefit', property: 'RemovedBENEFIT'},
+            { label: 'Added document', property: 'AddedDOCUMENT'},
+            { label: 'Removed document', property: 'RemovedDOCUMENT'},
+            { label: 'Added project', property: 'AddedPROJECT'},
+            { label: 'Removed project', property: 'RemovedPROJECT'},
+            { label: 'Added extract technical details', property: 'AddedEXTRACTTECHNICALDETAILS'},
+            { label: 'Removed extract technical details', property: 'RemovedEXTRACTTECHNICALDETAILS'},
+            { label: 'Added schedule', property: 'AddedSCHEDULE'},
+            { label: 'Removed schedule', property: 'RemovedSCHEDULE'}
         ]
     }
 
