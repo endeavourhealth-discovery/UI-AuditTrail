@@ -12,21 +12,25 @@ public class EntityNameGetter {
 
     public static List<String> replaceUUIDsWithName(String type, List<String> items) throws Exception {
         switch (type) {
-            case "dpa" :
+            case "DATAPROCESSINGAGREEMENT" :
                 return getDPANames(items);
-            case "dsa" :
+            case "DATASHARINGAGREEMENT" :
                 return getDSANames(items);
-            case "dataset" :
+            case "DATASET" :
                 return getDataSetNames(items);
-            case "cohort" :
+            case "COHORT" :
                 return getCohortNames(items);
-            case "organisation" :
-            case "service" :
+            case "ORGANISATION" :
+            case "SERVICE" :
+            case "PUBLISHER" :
+            case "SUBSCRIBER" :
                 return getOrganisationNames(items);
-            case "region" :
+            case "REGION" :
                 return getRegionNames(items);
-            case "project" :
+            case "PROJECT" :
                 return getProjectNames(items);
+            case "DOCUMENT" :
+                return getDocumentNames(items);
             default: throw new Exception("Unknown type : " + type);
         }
     }
@@ -97,6 +101,16 @@ public class EntityNameGetter {
 
         Map<String, String> nameMap = orgs.stream()
                 .collect(Collectors.toMap(ProjectEntity::getUuid, ProjectEntity::getName));
+
+        return getNamesFromMap(items, nameMap);
+    }
+
+    private static List<String> getDocumentNames(List<String> items) throws Exception {
+
+        List<DocumentationEntity> orgs = DocumentationCache.getDocumentDetails(items);
+
+        Map<String, String> nameMap = orgs.stream()
+                .collect(Collectors.toMap(DocumentationEntity::getUuid, DocumentationEntity::getTitle));
 
         return getNamesFromMap(items, nameMap);
     }

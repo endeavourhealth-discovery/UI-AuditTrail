@@ -146,6 +146,7 @@ export class AuditDetailCommonComponent implements OnInit {
       case "User Password Email": return dd.getUserPasswordDisplayDetails();
       case "Cohort": return dd.getCohortDisplayDetails();
       case "Data set": return dd.getCohortDisplayDetails();
+      case "Project": return dd.getProjectDisplayDetails();
     }
   }
 

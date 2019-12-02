@@ -160,4 +160,28 @@ export class DisplayDetails {
             { label: 'Technical definition', property: 'technicalDefinition'}
         ]
     }
+
+    getProjectDisplayDetails(): any[] {
+        return [
+            { label: 'Id', property: 'uuid'},
+            { label: 'Name', property: 'name'},
+            { label: 'Lead user', property: 'leadUser'},
+            { label: 'Technical lead user', property: 'technicalLeadUser'},
+            { label: 'Technical lead user', property: 'consentModelId'},
+            { label: 'De-identification level', property: 'deidentificationLevel'},
+            { label: 'Project type', property: 'projectTypeId'},
+            { label: 'Security infrastructure', property: 'securityInfrastructureId'},
+            { label: 'Ip address', property: 'ipAddress'},
+            { label: 'Summary', property: 'summary'},
+            { label: 'Business case', property: 'businessCase'},
+            { label: 'Objectives', property: 'objectives'},
+            { label: 'Security architecture', property: 'securityArchitectureId'},
+            { label: 'Storage protocol', property: 'storageProtocolId'},
+            { label: 'Business case status', property: 'businessCaseStatus'},
+            { label: 'Flow schedule', property: 'flowScheduleId'},
+            { label: 'Project status', property: 'projectStatusId'},
+            { label: 'Start date', property: 'startDate'},
+            { label: 'End date', property: 'endDate'}
+        ]
+    }
 }

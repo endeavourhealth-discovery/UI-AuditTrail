@@ -3,6 +3,7 @@ package org.endeavourhealth.uiaudit.logic;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
 import org.endeavourhealth.uiaudit.dal.DALHelper;
 import org.endeavourhealth.uiaudit.models.AuditDifference;
 
@@ -130,13 +131,15 @@ public class AuditCompareLogic {
         return rootNode;
     }
 
-    public JsonNode generateListDifferenceAuditJson(JsonNode auditJson, String fieldName, List<String> changedItems, String type) throws Exception {
-
+    public JsonNode generateListDifferenceAuditJson(JsonNode auditJson, boolean added, List<String> changedItems, String type) throws Exception {
+        String actionType = "Added";
+        if (!added) {
+            actionType = "Removed";
+        }
         changedItems = EntityNameGetter.replaceUUIDsWithName(type, changedItems);
 
-        for (String item : changedItems) {
-            ((ObjectNode) auditJson).put(fieldName, item);
-        }
+        ((ObjectNode) auditJson).put(actionType + type, StringUtils.join(changedItems, System.getProperty("line.separator")));
+
 
         return auditJson;
     }
