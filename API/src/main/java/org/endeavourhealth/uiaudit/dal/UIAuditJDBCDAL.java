@@ -402,4 +402,36 @@ public class UIAuditJDBCDAL {
             ConnectionPool.getInstance().push(conn);
         }
     }
+
+    public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
+                                String itemBefore, String itemAfter) throws Exception {
+
+        UserProjectEntity userProject = UserCache.getUserProject(userProjectId);
+
+        String sql = "insert into audit (id, timestamp, audit_type, item_type, item_before, " +
+                " item_after, audit_json, user_id, organisation_id, project_id) " +
+                " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+
+        String auditJson = null;
+
+        Connection conn = ConnectionPool.getInstance().pop();
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            int i = 1;
+
+            statement.setString(i++, UUID.randomUUID().toString());
+            statement.setTimestamp(i++, new Timestamp(System.currentTimeMillis()));
+            statement.setByte(i++, auditAction.getAuditAction().byteValue());
+            statement.setByte(i++, itemType.getItemType().byteValue());
+            statement.setString(i++, itemBefore);
+            statement.setString(i++, itemAfter);
+            statement.setString(i++, auditJson);
+            statement.setString(i++, userProject.getUserId());
+            statement.setString(i++, userProject.getOrganisationId());
+            statement.setString(i++, userProject.getProjectId());
+
+            statement.execute();
+        } finally {
+            ConnectionPool.getInstance().push(conn);
+        }
+    }
 }
