@@ -184,4 +184,11 @@ export class DisplayDetails {
             { label: 'End date', property: 'endDate'}
         ]
     }
+    getDataProcessingAgreementDisplayDetails(): any[] {
+        return [
+            { label: 'Id', property: 'uuid'},
+            { label: 'Name', property: 'name'}
+            // Other fields to be added
+        ]
+    }
 }

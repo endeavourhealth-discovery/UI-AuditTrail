@@ -147,6 +147,7 @@ export class AuditDetailCommonComponent implements OnInit {
       case "Cohort": return dd.getCohortDisplayDetails();
       case "Data set": return dd.getDataSetDisplayDetails();
       case "Project": return dd.getProjectDisplayDetails();
+      case "Data processing agreement": return  dd.getDataProcessingAgreementDisplayDetails();
     }
   }
 
