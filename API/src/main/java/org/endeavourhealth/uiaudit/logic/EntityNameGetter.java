@@ -31,6 +31,10 @@ public class EntityNameGetter {
                 return getProjectNames(items);
             case "DOCUMENT" :
                 return getDocumentNames(items);
+            case "BENEFIT" :
+            case "PURPOSE" :
+                return items;
+                // Just return uuids for now; ideally we want the title
             default: throw new Exception("Unknown type : " + type);
         }
     }
