@@ -368,6 +368,7 @@ public class UIAuditJDBCDAL {
         return filterOrgs;
     }
 
+    // Are itemBefore and itemAfter now redundant, since information is included in auditJson instead?
     public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
                                 String itemBefore, String itemAfter, JsonNode auditJson) throws Exception {
         addToAuditTrail(userProjectId, auditAction, itemType, itemBefore, itemAfter, DALHelper.prettyPrintJsonString(auditJson));
@@ -398,6 +399,9 @@ public class UIAuditJDBCDAL {
             statement.setString(i++, userProject.getProjectId());
 
             statement.execute();
+
+        } catch (Exception e) {
+            throw e;
         } finally {
             ConnectionPool.getInstance().push(conn);
         }
