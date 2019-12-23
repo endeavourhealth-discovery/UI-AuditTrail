@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonPurpose;
 import org.endeavourhealth.uiaudit.dal.DALHelper;
 import org.endeavourhealth.uiaudit.models.AuditDifference;
 
@@ -140,6 +141,23 @@ public class AuditCompareLogic {
 
         ((ObjectNode) auditJson).put(actionType + type, StringUtils.join(changedItems, System.getProperty("line.separator")));
 
+
+        return auditJson;
+    }
+
+    public JsonNode generateListDifferenceAuditJsonPurposes(JsonNode auditJson, boolean added, List<JsonPurpose> changedItems, String type) throws Exception {
+        String actionType = "Added";
+        if (!added) {
+            actionType = "Removed";
+        }
+
+        List<String> changes = new ArrayList<>();
+
+        for (JsonPurpose p : changedItems) {
+            changes.add(p.getUuid() + " - " + p.getTitle() + " - " + p.getDetail());
+        }
+
+        ((ObjectNode) auditJson).put(actionType + type, StringUtils.join(changes, System.getProperty("line.separator")));
 
         return auditJson;
     }
