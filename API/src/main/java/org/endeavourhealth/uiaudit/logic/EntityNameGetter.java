@@ -1,7 +1,9 @@
 package org.endeavourhealth.uiaudit.logic;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityPurposeDAL;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.*;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.*;
+import org.hl7.fhir.instance.model.List_;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,30 +14,27 @@ public class EntityNameGetter {
 
     public static List<String> replaceUUIDsWithName(String type, List<String> items) throws Exception {
         switch (type) {
-            case "DATAPROCESSINGAGREEMENT" :
+            case "DATAPROCESSINGAGREEMENT":
                 return getDPANames(items);
-            case "DATASHARINGAGREEMENT" :
+            case "DATASHARINGAGREEMENT":
                 return getDSANames(items);
-            case "DATASET" :
+            case "DATASET":
                 return getDataSetNames(items);
-            case "COHORT" :
+            case "COHORT":
                 return getCohortNames(items);
-            case "ORGANISATION" :
-            case "SERVICE" :
-            case "PUBLISHER" :
-            case "SUBSCRIBER" :
+            case "ORGANISATION":
+            case "SERVICE":
+            case "PUBLISHER":
+            case "SUBSCRIBER":
                 return getOrganisationNames(items);
-            case "REGION" :
+            case "REGION":
                 return getRegionNames(items);
-            case "PROJECT" :
+            case "PROJECT":
                 return getProjectNames(items);
-            case "DOCUMENT" :
+            case "DOCUMENT":
                 return getDocumentNames(items);
-            case "BENEFIT" :
-            case "PURPOSE" :
-                return items;
-                // Just return uuids for now; ideally we want the title
-            default: throw new Exception("Unknown type : " + type);
+            default:
+                throw new Exception("Unknown type : " + type);
         }
     }
 
