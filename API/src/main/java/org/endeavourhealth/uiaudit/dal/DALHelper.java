@@ -1,5 +1,8 @@
 package org.endeavourhealth.uiaudit.dal;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -110,6 +113,16 @@ public class DALHelper {
             return i;
         } catch (SQLException e) {
             throw new DALException("Error setting LONG array", e);
+        }
+    }
+
+    public static String prettyPrintJsonString(JsonNode jsonNode) throws Exception {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Object json = mapper.readValue(jsonNode.toString(), Object.class);
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+        } catch (Exception e) {
+            throw new Exception("Converting Json to String failed : " + e.getMessage());
         }
     }
 }

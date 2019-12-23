@@ -1,5 +1,6 @@
 package org.endeavourhealth.uiaudit.dal;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
@@ -367,6 +368,12 @@ public class UIAuditJDBCDAL {
         return filterOrgs;
     }
 
+    // Are itemBefore and itemAfter now redundant, since information is included in auditJson instead?
+    public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
+                                String itemBefore, String itemAfter, JsonNode auditJson) throws Exception {
+        addToAuditTrail(userProjectId, auditAction, itemType, itemBefore, itemAfter, DALHelper.prettyPrintJsonString(auditJson));
+    }
+
     public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
                                 String itemBefore, String itemAfter, String auditJson) throws Exception {
 
@@ -375,6 +382,41 @@ public class UIAuditJDBCDAL {
         String sql = "insert into audit (id, timestamp, audit_type, item_type, item_before, " +
                 " item_after, audit_json, user_id, organisation_id, project_id) " +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+
+        Connection conn = ConnectionPool.getInstance().pop();
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            int i = 1;
+
+            statement.setString(i++, UUID.randomUUID().toString());
+            statement.setTimestamp(i++, new Timestamp(System.currentTimeMillis()));
+            statement.setByte(i++, auditAction.getAuditAction().byteValue());
+            statement.setByte(i++, itemType.getItemType().byteValue());
+            statement.setString(i++, itemBefore);
+            statement.setString(i++, itemAfter);
+            statement.setString(i++, auditJson);
+            statement.setString(i++, userProject.getUserId());
+            statement.setString(i++, userProject.getOrganisationId());
+            statement.setString(i++, userProject.getProjectId());
+
+            statement.execute();
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            ConnectionPool.getInstance().push(conn);
+        }
+    }
+
+    public void addToAuditTrail(String userProjectId, AuditAction auditAction, ItemType itemType,
+                                String itemBefore, String itemAfter) throws Exception {
+
+        UserProjectEntity userProject = UserCache.getUserProject(userProjectId);
+
+        String sql = "insert into audit (id, timestamp, audit_type, item_type, item_before, " +
+                " item_after, audit_json, user_id, organisation_id, project_id) " +
+                " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+
+        String auditJson = null;
 
         Connection conn = ConnectionPool.getInstance().pop();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
