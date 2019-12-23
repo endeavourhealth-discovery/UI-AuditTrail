@@ -184,4 +184,15 @@ export class DisplayDetails {
             { label: 'End date', property: 'endDate'}
         ]
     }
+    getDataProcessingAgreementDisplayDetails(): any[] {
+        return [
+            { label: 'Id', property: 'uuid'},
+            { label: 'Name', property: 'name'},
+            { label: 'Description', property: 'description'},
+            { label: 'Status', property: 'dsaStatusId'},
+            // Data processor??
+            { label: 'Start date', property: 'startDate'},
+            { label: 'End date', property: 'endDate'}
+        ]
+    }
 }
