@@ -10,6 +10,10 @@ export class DisplayDetails {
             { label: 'Removed service', property: 'RemovedSERVICE'},
             { label: 'Added region', property: 'AddedREGION'},
             { label: 'Removed region', property: 'RemovedREGION'},
+            { label: 'Added parent region', property: 'AddedPARENTREGION'},
+            { label: 'Removed parent region', property: 'RemovedPARENTREGION'},
+            { label: 'Added child region', property: 'AddedCHILDREGION'},
+            { label: 'Removed child region', property: 'RemovedCHILDREGION'},
             { label: 'Added data sharing agreement', property: 'AddedDATASHARINGAGREEMENT'},
             { label: 'Removed data sharing agreement', property: 'RemovedDATASHARINGAGREEMENT'},
             { label: 'Added cohort', property: 'AddedCOHORT'},
@@ -204,6 +208,13 @@ export class DisplayDetails {
             { label: 'Consent model', property: 'consentModelId'},
             { label: 'Start date', property: 'startDate'},
             { label: 'End date', property: 'endDate'}
+        ]
+    }
+    getRegionDisplayDetails(): any[] {
+        return [
+            { label: 'Id', property: 'uuid'},
+            { label: 'Name', property: 'name'},
+            { label: 'Description', property: 'description'},
         ]
     }
 }
