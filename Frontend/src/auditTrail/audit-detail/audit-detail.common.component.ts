@@ -129,27 +129,47 @@ export class AuditDetailCommonComponent implements OnInit {
   }
 
   getDetailsToShow(itemType: string) {
-    const dd = new DisplayDetails();
-    switch (itemType) {
-      case "Linked Items": return dd.getChangedLinkedItemsDisplayDetails();
-      case "User project": return dd.getUserProjectDisplayDetails();
-      case "User": return dd.getUserDisplayDetails();
-      case "Delegation": return dd.getDelegationDisplayDetails();
-      case "Delegation relationship": return dd.getDelegationRelationshipDisplayDetails();
-      case "Default role change": return dd.getDefaultRoleChangeDisplayDetails();
-      case "Application": return dd.getApplicationDisplayDetails();
-      case "Application profile": return dd.getApplicationProfileDisplayDetails();
-      case "Application policy attribute": return dd.getApplicationPolicyAttributeDisplayDetails();
-      case "User region": return dd.getUserRegionDisplayDetails();
-      case "User application policy": return dd.getUserApplicationPolicyDisplayDetails();
-      case "Application policy": return dd.getApplicationPolicyDisplayDetails();
-      case "User Password Email": return dd.getUserPasswordDisplayDetails();
-      case "Cohort": return dd.getCohortDisplayDetails();
-      case "Data set": return dd.getDataSetDisplayDetails();
-      case "Project": return dd.getProjectDisplayDetails();
-      case "Data processing agreement": return  dd.getDataProcessingAgreementDisplayDetails();
-      default: this.log.error("Unexpected item type: " + itemType);
-    }
+      const dd = new DisplayDetails();
+      switch (itemType) {
+          case "Linked Items":
+              return dd.getChangedLinkedItemsDisplayDetails();
+          case "User project":
+              return dd.getUserProjectDisplayDetails();
+          case "User":
+              return dd.getUserDisplayDetails();
+          case "Delegation":
+              return dd.getDelegationDisplayDetails();
+          case "Delegation relationship":
+              return dd.getDelegationRelationshipDisplayDetails();
+          case "Default role change":
+              return dd.getDefaultRoleChangeDisplayDetails();
+          case "Application":
+              return dd.getApplicationDisplayDetails();
+          case "Application profile":
+              return dd.getApplicationProfileDisplayDetails();
+          case "Application policy attribute":
+              return dd.getApplicationPolicyAttributeDisplayDetails();
+          case "User region":
+              return dd.getUserRegionDisplayDetails();
+          case "User application policy":
+              return dd.getUserApplicationPolicyDisplayDetails();
+          case "Application policy":
+              return dd.getApplicationPolicyDisplayDetails();
+          case "User Password Email":
+              return dd.getUserPasswordDisplayDetails();
+          case "Cohort":
+              return dd.getCohortDisplayDetails();
+          case "Data set":
+              return dd.getDataSetDisplayDetails();
+          case "Project":
+              return dd.getProjectDisplayDetails();
+          case "Data processing agreement":
+              return dd.getDataProcessingAgreementDisplayDetails();
+          case "Data sharing agreement":
+              return dd.getDataSharingAgreementDisplayDetails();
+          default:
+              this.log.error("Unexpected item type: " + itemType);
+      }
   }
 
 }

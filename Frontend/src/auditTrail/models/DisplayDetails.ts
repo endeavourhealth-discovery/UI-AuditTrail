@@ -195,4 +195,15 @@ export class DisplayDetails {
             { label: 'End date', property: 'endDate'}
         ]
     }
+    getDataSharingAgreementDisplayDetails(): any[] {
+        return [
+            { label: 'Id', property: 'uuid'},
+            { label: 'Name', property: 'name'},
+            { label: 'Description', property: 'description'},
+            { label: 'Status', property: 'dsaStatusId'},
+            { label: 'Consent model', property: 'consentModelId'},
+            { label: 'Start date', property: 'startDate'},
+            { label: 'End date', property: 'endDate'}
+        ]
+    }
 }
