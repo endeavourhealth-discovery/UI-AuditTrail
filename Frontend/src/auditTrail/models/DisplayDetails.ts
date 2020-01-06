@@ -59,6 +59,10 @@ export class DisplayDetails {
             { label: 'Added schedule', property: 'Added schedule'},
             { label: 'Removed schedule', property: 'Removed schedule'},
 
+            { label: 'Added address', property: 'Added address'},
+            { label: 'Updated address', property: 'Updated address'},
+            { label: 'Removed address', property: 'Removed address'},
+
             // Previous convention kept for now - to be removed in due course
             { label: 'Added organisation', property: 'AddedORGANISATION'},
             { label: 'Removed organisation', property: 'RemovedORGANISATION'},
