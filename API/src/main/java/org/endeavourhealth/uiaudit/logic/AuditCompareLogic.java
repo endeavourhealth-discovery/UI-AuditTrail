@@ -132,32 +132,22 @@ public class AuditCompareLogic {
         return rootNode;
     }
 
-    public JsonNode generateListDifferenceAuditJson(JsonNode auditJson, boolean added, List<String> changedItems, String type) throws Exception {
-        String actionType = "Added";
-        if (!added) {
-            actionType = "Removed";
-        }
+    public JsonNode generateListDifferenceAuditJson(JsonNode auditJson, String changeDescription, List<String> changedItems, String type) throws Exception {
         changedItems = EntityNameGetter.replaceUUIDsWithName(type, changedItems);
 
-        ((ObjectNode) auditJson).put(actionType + type, StringUtils.join(changedItems, System.getProperty("line.separator")));
-
+        ((ObjectNode) auditJson).put(changeDescription, StringUtils.join(changedItems, System.getProperty("line.separator")));
 
         return auditJson;
     }
 
-    public JsonNode generateListDifferenceAuditJsonPurposes(JsonNode auditJson, boolean added, List<JsonPurpose> changedItems, String type) throws Exception {
-        String actionType = "Added";
-        if (!added) {
-            actionType = "Removed";
-        }
-
+    public JsonNode generateListDifferenceAuditJsonPurposes(JsonNode auditJson, String changeDescription, List<JsonPurpose> changedItems, String type) throws Exception {
         List<String> changes = new ArrayList<>();
 
         for (JsonPurpose p : changedItems) {
             changes.add(p.getUuid() + " - " + p.getTitle() + " - " + p.getDetail());
         }
 
-        ((ObjectNode) auditJson).put(actionType + type, StringUtils.join(changes, System.getProperty("line.separator")));
+        ((ObjectNode) auditJson).put(changeDescription, StringUtils.join(changes, System.getProperty("line.separator")));
 
         return auditJson;
     }
