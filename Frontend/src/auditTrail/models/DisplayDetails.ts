@@ -217,4 +217,22 @@ export class DisplayDetails {
             { label: 'Description', property: 'description'},
         ]
     }
+    getOrganisationDisplayDetails(): any[] {
+        return [
+            { label: 'Id', property: 'uuid'},
+            { label: 'Name', property: 'name'},
+            { label: 'Alternative name', property: 'alternativeName'},
+            { label: 'ODS code', property: 'odsCode'},
+            { label: 'ICO code', property: 'icoCode'},
+            { label: 'IG toolkit status', property: 'igToolkitStatus'},
+            { label: 'Date of registration', property: 'dateOfRegistration'},
+            { label: 'Organisation type', property: 'type'}
+            //{ label: 'Name', property: 'registrationPerson'},
+            //{ label: 'Name', property: 'evidenceOfRegistration'},
+            //{ label: 'Name', property: 'isService'},
+            //{ label: 'Name', property: 'bulkImported'},
+            //{ label: 'Name', property: 'bulkConflictedWith'},
+            //{ label: 'Name', property: 'active'},
+        ]
+    }
 }
