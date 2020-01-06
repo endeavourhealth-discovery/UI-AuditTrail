@@ -2,6 +2,64 @@ export class DisplayDetails {
 
     getChangedLinkedItemsDisplayDetails(): any[] {
         return [
+            { label: 'Added region', property: 'Added region'},
+            { label: 'Removed region', property: 'Removed region'},
+            { label: 'Added parent region', property: 'Added parent region'},
+            { label: 'Removed parent region', property: 'Removed parent region'},
+            { label: 'Added child region', property: 'Added child region'},
+            { label: 'Removed child region', property: 'Removed child region'},
+
+            { label: 'Added organisation', property: 'Added organisation'},
+            { label: 'Removed organisation', property: 'Removed organisation'},
+            { label: 'Added parent organisation', property: 'Added parent organisation'},
+            { label: 'Removed parent organisation', property: 'Removed parent organisation'},
+            { label: 'Added child organisation', property: 'Added child organisation'},
+            { label: 'Removed child organisation', property: 'Removed child organisation'},
+
+            { label: 'Added service', property: 'Added service'},
+            { label: 'Removed service', property: 'Removed service'},
+
+            { label: 'Added data processing agreement', property: 'Added data processing agreement'},
+            { label: 'Removed data processing agreement', property: 'Removed data processing agreement'},
+            { label: 'Added publishing data processing agreement', property: 'Added publishing data processing agreement'},
+            { label: 'Removed publishing data processing agreement', property: 'Removed publishing data processing agreement'},
+
+            { label: 'Added data sharing agreement', property: 'Added data sharing agreement'},
+            { label: 'Removed data sharing agreement', property: 'Removed data sharing agreement'},
+            { label: 'Added publishing data sharing agreement', property: 'Added publishing data sharing agreement'},
+            { label: 'Removed publishing data sharing agreement', property: 'Removed publishing data sharing agreement'},
+            { label: 'Added subscribing data sharing agreement', property: 'Added subscribing data sharing agreement'},
+            { label: 'Removed subscribing data sharing agreement', property: 'Removed subscribing data sharing agreement'},
+
+            { label: 'Added project', property: 'Added project'},
+            { label: 'Removed project', property: 'Removed project'},
+            { label: 'Added publishing project', property: 'Added publishing project'},
+            { label: 'Removed publishing project', property: 'Removed publishing project'},
+            { label: 'Added subscribing project', property: 'Added subscribing project'},
+            { label: 'Removed subscribing project', property: 'Removed subscribing project'},
+
+            { label: 'Added purpose', property: 'Added purpose'},
+            { label: 'Removed purpose', property: 'Removed purpose'},
+
+            { label: 'Added benefit', property: 'Added benefit'},
+            { label: 'Removed benefit', property: 'Removed benefit'},
+
+            { label: 'Added document', property: 'Added document'},
+            { label: 'Removed document', property: 'Removed document'},
+
+            { label: 'Added dataset', property: 'Added dataset'},
+            { label: 'Removed dataset', property: 'Removed dataset'},
+
+            { label: 'Added cohort', property: 'Added cohort'},
+            { label: 'Removed cohort', property: 'Removed cohort'},
+
+            { label: 'Added extract technical details', property: 'Added extract technical details'},
+            { label: 'Removed extract technical details', property: 'Removed extract technical details'},
+
+            { label: 'Added schedule', property: 'Added schedule'},
+            { label: 'Removed schedule', property: 'Removed schedule'},
+
+            // Previous convention kept for now - to be removed in due course
             { label: 'Added organisation', property: 'AddedORGANISATION'},
             { label: 'Removed organisation', property: 'RemovedORGANISATION'},
             { label: 'Added data processing agreements', property: 'AddedDATAPROCESSINGAGREEMENT'},
