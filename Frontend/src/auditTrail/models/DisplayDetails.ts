@@ -39,9 +39,11 @@ export class DisplayDetails {
             { label: 'Removed subscribing project', property: 'Removed subscribing project'},
 
             { label: 'Added purpose', property: 'Added purpose'},
+            { label: 'Updated purpose', property: 'Updated purpose'},
             { label: 'Removed purpose', property: 'Removed purpose'},
 
             { label: 'Added benefit', property: 'Added benefit'},
+            { label: 'Updated benefit', property: 'Updated benefit'},
             { label: 'Removed benefit', property: 'Removed benefit'},
 
             { label: 'Added document', property: 'Added document'},
@@ -54,9 +56,11 @@ export class DisplayDetails {
             { label: 'Removed cohort', property: 'Removed cohort'},
 
             { label: 'Added extract technical details', property: 'Added extract technical details'},
+            { label: 'Updated extract technical details', property: 'Updated extract technical details'},
             { label: 'Removed extract technical details', property: 'Removed extract technical details'},
 
             { label: 'Added schedule', property: 'Added schedule'},
+            { label: 'Updated schedule', property: 'Updated schedule'},
             { label: 'Removed schedule', property: 'Removed schedule'},
 
             { label: 'Added address', property: 'Added address'},
