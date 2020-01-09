@@ -1,5 +1,5 @@
 {
-  "name": "dds-audittrail",
+  "name": "dds-auditTrail",
   "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^8.2.9",

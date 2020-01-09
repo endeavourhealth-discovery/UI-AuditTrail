@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "dds-angular8": {
+    "dds-auditTrail": {
       "projectType": "library",
       "root": "projects/dds-auditTrail",
       "sourceRoot": "projects/dds-auditTrail/src",
