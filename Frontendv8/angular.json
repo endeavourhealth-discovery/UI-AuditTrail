@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "dds-angular8": {
+      "projectType": "library",
+      "root": "projects/dds-auditTrail",
+      "sourceRoot": "projects/dds-auditTrail/src",
+      "prefix": "dds",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/dds-auditTrail/tsconfig.lib.json",
+            "project": "projects/dds-auditTrail/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/dds-auditTrail/src/test.ts",
+            "tsConfig": "projects/dds-auditTrail/tsconfig.spec.json",
+            "karmaConfig": "projects/dds-auditTrail/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/dds-auditTrail/tsconfig.lib.json",
+              "projects/dds-auditTrail/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }},
+  "defaultProject": "dds-auditTrail"
+}

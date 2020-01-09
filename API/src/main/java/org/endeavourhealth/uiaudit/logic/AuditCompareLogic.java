@@ -20,6 +20,7 @@ public class AuditCompareLogic {
 
         return DALHelper.prettyPrintJsonString(auditNode);
     }
+
     public JsonNode getAuditJsonNode(String title, Object oldObject, Object newObject) throws Exception {
         List<AuditDifference> differences;
 
@@ -95,13 +96,13 @@ public class AuditCompareLogic {
             System.out.println(field.getName());
             System.out.println(field.get(oldObject).toString());
             System.out.println(field.get(newObject).toString());
-            // if(!field.get(oldObject).equals(field.get(newObject))){
-            AuditDifference difference = new AuditDifference();
-            difference.setFieldName(field.getName());
-            difference.setOldValue(field.get(oldObject).toString());
-            difference.setNewValue(field.get(newObject).toString());
-            differenceList.add(difference);
-            // }
+            if(!field.get(oldObject).equals(field.get(newObject))) {
+                AuditDifference difference = new AuditDifference();
+                difference.setFieldName(field.getName());
+                difference.setOldValue(field.get(oldObject).toString());
+                difference.setNewValue(field.get(newObject).toString());
+                differenceList.add(difference);
+            }
         }
         return differenceList;
     }

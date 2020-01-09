@@ -1,0 +1,11 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+export { AbstractMenuProvider, LayoutModule, LayoutComponent, MenuOption, SecurityModule, CanActivateRouteGuard, LoggerModule, LoggerService, UserManagerModule, UserManagerService, CoreModule, StateService } from './public-api';
+export { AccessDeniedComponent as ɵa } from './lib/security/access-denied/access-denied.component';
+export { UserProjectHttpInterceptor as ɵb } from './lib/user-manager/user-project-http-interceptor';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGRzLWFuZ3VsYXI4LmpzIiwic291cmNlUm9vdCI6Im5nOi8vZGRzLWFuZ3VsYXI4LyIsInNvdXJjZXMiOlsiZGRzLWFuZ3VsYXI4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFJQSxxTkFBYyxjQUFjLENBQUM7QUFFN0IsT0FBTyxFQUFDLHFCQUFxQixJQUFJLEVBQUUsRUFBQyxNQUFNLHNEQUFzRCxDQUFDO0FBQ2pHLE9BQU8sRUFBQywwQkFBMEIsSUFBSSxFQUFFLEVBQUMsTUFBTSxrREFBa0QsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogR2VuZXJhdGVkIGJ1bmRsZSBpbmRleC4gRG8gbm90IGVkaXQuXG4gKi9cblxuZXhwb3J0ICogZnJvbSAnLi9wdWJsaWMtYXBpJztcblxuZXhwb3J0IHtBY2Nlc3NEZW5pZWRDb21wb25lbnQgYXMgybVhfSBmcm9tICcuL2xpYi9zZWN1cml0eS9hY2Nlc3MtZGVuaWVkL2FjY2Vzcy1kZW5pZWQuY29tcG9uZW50JztcbmV4cG9ydCB7VXNlclByb2plY3RIdHRwSW50ZXJjZXB0b3IgYXMgybVifSBmcm9tICcuL2xpYi91c2VyLW1hbmFnZXIvdXNlci1wcm9qZWN0LWh0dHAtaW50ZXJjZXB0b3InOyJdfQ==

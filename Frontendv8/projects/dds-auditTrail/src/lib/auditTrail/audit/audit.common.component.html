@@ -1,0 +1,46 @@
+<div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+
+  <mat-form-field appearance="outline" fxFlex="25">
+    <mat-label>Select organisation</mat-label>
+    <mat-select matInput name="status" [(ngModel)]="selectedOrg" name="selectedOrg" (selectionChange)="getUsers()">
+      <mat-option *ngFor="let del of delegatedOrganisations" [value]="del">{{del.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex="25">
+    <mat-label>Select user</mat-label>
+    <mat-select matInput name="status" [(ngModel)]="selectedUser" name="selectedUser" (selectionChange)="getUsers()">
+      <mat-option *ngFor="let usr of userList" [value]="usr">{{usr.username}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex="20">
+    <input matInput [matDatepicker]="fromPicker" placeholder="From date" [value]="dateFrom">
+    <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+    <mat-datepicker #fromPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" fxFlex="20">
+    <input matInput [matDatepicker]="toPicker" placeholder="To date" [value]="dateTo">
+    <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+    <mat-datepicker #toPicker></mat-datepicker>
+  </mat-form-field>
+
+  <div fxFlex="10">
+    <button mat-icon-button (click)="filter()">
+      <mat-icon>filter_list</mat-icon>
+    </button>
+    <button mat-icon-button (click)="reset()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+
+</div>
+
+<div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
+  <app-generic-table
+    [items]="auditSummaries"
+    [detailsToShow]="auditSummaryDetailsToShow"
+    (clicked)="showDetails($event)"
+    [allowSelect]="false"></app-generic-table>
+</div>

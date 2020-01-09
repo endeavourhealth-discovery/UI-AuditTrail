@@ -1,0 +1,84 @@
+@import '~@angular/material/theming';
+
+.logger-info {
+  color: white !important;
+  background-color: #1976d2 !important;
+}
+
+.logger-success {
+  color: white !important;
+  background-color: #388e3c !important;
+}
+
+.logger-error {
+  color: white !important;
+  background-color: #d32f2f !important;
+}
+
+@mixin theme-common($primary, $accent, $background) {
+  .layout-header {
+    background-color: mat-color($primary, 200);
+  }
+
+  .side-nav {
+    background-color: mat-color($primary, 800);
+    color: mat-color($primary, 50);
+  }
+
+  .logo-container {
+    background-color: mat-color($primary, 900);
+  }
+
+  .nav-user {
+    background-color: mat-color($primary, 900);
+
+    h5 {
+      color: mat-color($primary, 300);
+    }
+  }
+
+  .mat-card-avatar {
+    color: mat-color($accent);
+  }
+
+  .mat-card-content,
+  .mat-table,
+  .mat-paginator {
+    background-color: $background;
+    .mat-select-content {
+      background-color: mat-color($accent);
+    }
+  }
+}
+
+@mixin theme-layout($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $background: mat-color($primary, 50);
+
+  @include theme-common($primary, $accent, $background);
+
+  .nav-content {
+    background-color: white;
+  }
+
+  .mat-card {
+    background-color: mat-color($primary, 200);
+  }
+}
+
+@mixin theme-layout-dark($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $background: mat-color($primary, 600);
+
+  @include theme-common($primary, $accent, $background);
+
+  .nav-content {
+    background-color: mat-color($primary, 700);
+  }
+
+  .mat-card {
+    background-color: mat-color($primary, 500);
+  }
+}
