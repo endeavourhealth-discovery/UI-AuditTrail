@@ -10,6 +10,29 @@
   <mat-card-content>
     <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
 
+
+      <h2>{{auditDetails?.title}}</h2>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-compact" fxFlex="100" fxFill matSort>
+
+        <ng-container matColumnDef="label">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let element"> {{element.label}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="before">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Previous</th>
+          <td mat-cell *matCellDef="let element"> {{auditDetails?.before[element.property]}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="after">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Current</th>
+          <td mat-cell *matCellDef="let element"> {{auditDetails?.after[element.property]}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="propertiesToShow"></tr>
+        <tr mat-row *matRowDef="let row; columns: propertiesToShow;"></tr>
+      </table>
     </div>
     <br>
   </mat-card-content>

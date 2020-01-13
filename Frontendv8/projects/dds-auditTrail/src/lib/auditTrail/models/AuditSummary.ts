@@ -11,7 +11,7 @@ export class AuditSummary {
 
   getAuditSummaryDisplayDetails(): any[] {
     return [
-      { label: 'Username', property: 'username'},
+      { label: 'Username', property: 'userName'},
       { label: 'Project', property: 'project'},
       { label: 'Organisation', property: 'organisation'},
       { label: 'Timestamp', property: 'timestamp'},

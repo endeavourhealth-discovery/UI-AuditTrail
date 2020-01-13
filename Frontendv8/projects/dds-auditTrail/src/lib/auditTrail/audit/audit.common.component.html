@@ -36,11 +36,12 @@
   </div>
 
 </div>
-
-<div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
-  <app-generic-table
-    [items]="auditSummaries"
-    [detailsToShow]="auditSummaryDetailsToShow"
-    (clicked)="showDetails($event)"
-    [allowSelect]="false"></app-generic-table>
-</div>
+<app-generic-table-ssp
+  [items]="auditSummaries"
+  [detailsToShow]="auditSummaryDetailsToShow"
+  (clicked)="showDetails($event)"
+  [allowSelect]="false"
+  [allowSearch]="false"
+  [totalItems]="totalItems"
+  (onPageChange)="pageChange($event)"
+></app-generic-table-ssp>

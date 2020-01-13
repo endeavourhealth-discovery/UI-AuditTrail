@@ -12,7 +12,7 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
-  MatMenuModule,
+  MatMenuModule, MatNativeDateModule,
   MatPaginatorModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -25,8 +25,8 @@ import {
   MatTreeModule
 } from "@angular/material";
 import {RouterModule} from "@angular/router";
-import {GenericTableModule} from "dds-angular8";
 import {FlexModule} from "@angular/flex-layout";
+import {GenericTableModule} from "dds-angular8";
 
 @NgModule({
   imports: [
@@ -50,6 +50,7 @@ import {FlexModule} from "@angular/flex-layout";
     MatDialogModule,
     MatButtonModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     MatTreeModule,
     MatTooltipModule,
     MatTabsModule,
@@ -59,7 +60,8 @@ import {FlexModule} from "@angular/flex-layout";
   declarations: [AuditCommonComponent, AuditDetailCommonComponent],
   providers: [
     AuditCommonService,
-    DatePipe
+    DatePipe,
+    MatDatepickerModule
   ],
   entryComponents: [
     AuditDetailCommonComponent

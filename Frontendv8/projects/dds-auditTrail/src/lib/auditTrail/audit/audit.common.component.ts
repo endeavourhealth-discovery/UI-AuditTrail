@@ -116,7 +116,7 @@ export class AuditCommonComponent implements OnInit, OnChanges {
 
     const dialogRef = this.dialog.open(AuditDetailCommonComponent, {
       width: '800px',
-      data: {audit: audit}
+      data: audit
     })
 
     dialogRef.afterClosed().subscribe(result => {
@@ -124,9 +124,9 @@ export class AuditCommonComponent implements OnInit, OnChanges {
     });
   }
 
-  pageChanged($event) {
-
-    this.pageNumber = $event;
+  pageChange($event) {
+    this.pageNumber = $event.pageIndex + 1; // pagination index starts at 0, mySQL is 1
+    this.pageSize = $event.pageSize;
     this.getAudit();
   }
 

@@ -64,17 +64,17 @@ export class AuditCommonService {
 
   getUsers(organisationId: string = null): Observable<User[]> {
 
-      var url = 'api/uiaudit/getUIAuditUsers';
-      let params = new HttpParams();
-      params = params.append('organisationId', organisationId);
-      return this.http.get<User[]>(url, {params});
+    var url = 'api/uiaudit/getUIAuditUsers';
+    let params = new HttpParams();
+    params = params.append('organisationId', organisationId);
+    return this.http.get<User[]>(url, {params});
   }
 
   getOrganisations(organisationId: string = null): Observable<Organisation[]> {
 
-      let params = new HttpParams();
-      params = params.append('organisationId', organisationId);
-      return this.http.get<Organisation[]>('api/uiaudit/getUIAuditOrganisations', {params});
+    let params = new HttpParams();
+    params = params.append('organisationId', organisationId);
+    return this.http.get<Organisation[]>('api/uiaudit/getUIAuditOrganisations', {params});
   }
 
 }
