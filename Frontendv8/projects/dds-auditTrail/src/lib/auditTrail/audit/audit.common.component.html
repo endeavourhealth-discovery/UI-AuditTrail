@@ -28,14 +28,15 @@
 
   <div fxFlex="10">
     <button mat-icon-button (click)="filter()">
-      <mat-icon>filter_list</mat-icon>
+      <i class="far fa-fw fa-filter"></i>
     </button>
     <button mat-icon-button (click)="reset()">
-      <mat-icon>clear</mat-icon>
+      <i class="far fa-fw fa-times"></i>
     </button>
   </div>
 
 </div>
+<br>
 <app-generic-table-ssp
   [items]="auditSummaries"
   [detailsToShow]="auditSummaryDetailsToShow"
