@@ -15,7 +15,8 @@ export class AuditSummary {
       { label: 'Project', property: 'project'},
       { label: 'Organisation', property: 'organisation'},
       { label: 'Timestamp', property: 'timestamp'},
-      { label: 'Action', property: 'auditAction'}
+      { label: 'Action', property: 'auditAction'},
+      { label: 'Item type', property: 'itemType'}
     ]
   }
 }

@@ -171,19 +171,20 @@ export class DisplayDetails {
       { label: 'Name', property: 'name'},
       { label: 'Lead user', property: 'leadUser'},
       { label: 'Technical lead user', property: 'technicalLeadUser'},
-      { label: 'Technical lead user', property: 'consentModelId'},
-      { label: 'De-identification level', property: 'deidentificationLevel'},
-      { label: 'Project type', property: 'projectTypeId'},
-      { label: 'Security infrastructure', property: 'securityInfrastructureId'},
+      { label: 'Technical lead user', property: 'consentModelId', link: 'consents'},
+      { label: 'De-identification level', property: 'deidentificationLevel', link: 'deidentificationLevel'},
+      { label: 'Project type', property: 'projectTypeId', link: 'projectTypes'},
+      { label: 'Security infrastructure', property: 'securityInfrastructureId', link: 'securityInfrastructures'},
       { label: 'Ip address', property: 'ipAddress'},
       { label: 'Summary', property: 'summary'},
       { label: 'Business case', property: 'businessCase'},
+      { label: 'Output format', property: 'outputFormat', link: 'outputFormat'},
       { label: 'Objectives', property: 'objectives'},
-      { label: 'Security architecture', property: 'securityArchitectureId'},
-      { label: 'Storage protocol', property: 'storageProtocolId'},
-      { label: 'Business case status', property: 'businessCaseStatus'},
-      { label: 'Flow schedule', property: 'flowScheduleId'},
-      { label: 'Project status', property: 'projectStatusId'},
+      { label: 'Security architecture', property: 'securityArchitectureId', link: 'securityArchitectures'},
+      { label: 'Storage protocol', property: 'storageProtocolId', link: 'storageProtocols'},
+      { label: 'Business case status', property: 'businessCaseStatus', link: 'businessCaseStatuses'},
+      { label: 'Flow schedule', property: 'flowScheduleId', link: 'flowScheduleIds'},
+      { label: 'Project status', property: 'projectStatusId', link: 'status'},
       { label: 'Start date', property: 'startDate'},
       { label: 'End date', property: 'endDate'}
     ]
@@ -193,7 +194,7 @@ export class DisplayDetails {
       { label: 'Id', property: 'uuid'},
       { label: 'Name', property: 'name'},
       { label: 'Description', property: 'description'},
-      { label: 'Status', property: 'dsaStatusId'},
+      { label: 'Status', property: 'dsaStatusId', link: 'status'},
       // Data processor??
       { label: 'Start date', property: 'startDate'},
       { label: 'End date', property: 'endDate'}
@@ -204,12 +205,13 @@ export class DisplayDetails {
       { label: 'Id', property: 'uuid'},
       { label: 'Name', property: 'name'},
       { label: 'Description', property: 'description'},
-      { label: 'Status', property: 'dsaStatusId'},
-      { label: 'Consent model', property: 'consentModelId'},
+      { label: 'Status', property: 'dsaStatusId', link: 'status'},
+      { label: 'Consent model', property: 'consentModelId', link: 'consents'},
       { label: 'Start date', property: 'startDate'},
       { label: 'End date', property: 'endDate'}
     ]
   }
+
   getRegionDisplayDetails(): any[] {
     return [
       { label: 'Id', property: 'uuid'},
@@ -217,4 +219,23 @@ export class DisplayDetails {
       { label: 'Description', property: 'description'},
     ]
   }
+
+  getOrganisationDisplayDetails(): any[] {
+    return [
+      { label: 'Id', property: 'uuid'},
+      { label: 'Name', property: 'name'},
+      { label: 'Alternative name', property: 'alternativeName'},
+      { label: 'ODS code', property: 'odsCode'},
+      { label: 'ICO code', property: 'icoCode'},
+      { label: 'IG toolkit status', property: 'igToolkitStatus'},
+      { label: 'Date of registration', property: 'dateOfRegistration'},
+      { label: 'Registration person', property: 'registrationPerson'},
+      { label: 'Evidence of registration', property: 'evidenceOfRegistration'},
+      { label: 'Organisation type', property: 'type', link: 'organisationType'},
+      { label: 'System supplier type', property: 'systemSupplierSystemId', link: 'systemSupplierSystems'},
+      { label: 'System supplier reference', property: 'systemSupplierReference'},
+      { label: 'System supplier sharing activated', property: 'systemSupplierSharingActivated', link: 'systemSupplierSharingActivated'},
+    ]
+  }
+
 }

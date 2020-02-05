@@ -1,17 +1,10 @@
-<mat-card>
-  <mat-card-header>
-    <div mat-card-avatar>
-      <mat-icon>lightbulb_outline</mat-icon>
-    </div>
-    <mat-card-title>Audit details</mat-card-title>
-    <mat-card-subtitle>Full details of the changes that were made</mat-card-subtitle>
-    <div fxFlex></div>
-  </mat-card-header>
-  <mat-card-content>
+<h1 mat-dialog-title>Audit details</h1>
+<div mat-dialog-content>
+  <div class="scroll-box-400">
     <div class="flex" fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="16px grid" fxLayoutAlign="start">
 
 
-      <h2>{{auditDetails?.title}}</h2>
+      <h4>{{auditDetails?.title}}</h4>
 
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-compact" fxFlex="100" fxFill matSort>
 
@@ -34,10 +27,9 @@
         <tr mat-row *matRowDef="let row; columns: propertiesToShow;"></tr>
       </table>
     </div>
-    <br>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="accent" (click)="cancel()" cdkFocusInitial>Cancel</button>
-  </mat-card-actions>
-</mat-card>
-
+  </div>
+  <br>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="accent" (click)="cancel()" cdkFocusInitial>Close</button>
+</div>

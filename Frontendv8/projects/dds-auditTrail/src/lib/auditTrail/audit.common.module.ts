@@ -26,7 +26,7 @@ import {
 } from "@angular/material";
 import {RouterModule} from "@angular/router";
 import {FlexModule} from "@angular/flex-layout";
-import {GenericTableModule} from "dds-angular8";
+import {GenericTableModule, ItemLinkageModule} from "dds-angular8";
 
 @NgModule({
   imports: [
@@ -55,7 +55,8 @@ import {GenericTableModule} from "dds-angular8";
     MatTooltipModule,
     MatTabsModule,
     MatProgressBarModule,
-    GenericTableModule
+    GenericTableModule,
+    ItemLinkageModule
   ],
   declarations: [AuditCommonComponent, AuditDetailCommonComponent],
   providers: [
