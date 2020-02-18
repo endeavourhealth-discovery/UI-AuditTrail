@@ -114,7 +114,6 @@ export class AuditCommonComponent implements OnInit, OnChanges {
       fromDate = this.dateFrom;
       toDate = this.dateTo;
     }
-    console.log('getting count', fromDate);
     this.auditService.getAuditCount(this.userOrganisationId, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
@@ -182,6 +181,8 @@ export class AuditCommonComponent implements OnInit, OnChanges {
   filter() {
     this.pageNumber = 1;
     this.filtered = true;
+
+    this.refresh();
   }
 
   refresh() {
@@ -190,4 +191,3 @@ export class AuditCommonComponent implements OnInit, OnChanges {
   }
 
 }
-a
