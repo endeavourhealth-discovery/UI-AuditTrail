@@ -150,7 +150,8 @@ public class UIAuditJDBCDAL {
 
     }
 
-    public long getAuditCount(String userOrganisationId, String organisationId, String userId) throws Exception {
+    public long getAuditCount(String userOrganisationId, String organisationId, String userId,
+                              Timestamp startDate, Timestamp endDate) throws Exception {
 
 
         List<String> filterOrgs = new ArrayList<>();
@@ -184,6 +185,16 @@ public class UIAuditJDBCDAL {
             }
         }
 
+        if (startDate != null) {
+            sql += whereAnd +  " a.timestamp >= ?";
+            whereAnd = " and ";
+        }
+
+        if (endDate != null) {
+            sql += whereAnd + " a.timestamp <= ?";
+            whereAnd = " and ";
+        }
+
         Connection conn = ConnectionPool.getInstance().pop();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
@@ -200,6 +211,13 @@ public class UIAuditJDBCDAL {
 
             if (organisationId != null) {
                 statement.setString(i++, organisationId);
+            }
+
+            if (startDate != null) {
+                statement.setTimestamp(i++, startDate);
+            }
+            if (endDate != null) {
+                statement.setTimestamp(i++, endDate);
             }
 
             ResultSet rs = statement.executeQuery();

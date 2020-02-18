@@ -38,7 +38,8 @@ export class AuditCommonService {
     return this.http.get<AuditSummary[]>('api/uiaudit/getUIAudit', {params});
   }
 
-  getAuditCount(userOrganisationId: string, organisationId: string = null, userId: string = null): Observable<number> {
+  getAuditCount(userOrganisationId: string, organisationId: string = null, userId: string = null,
+                dateFrom: Date = null, dateTo: Date = null): Observable<number> {
 
     let params = new HttpParams();
 
@@ -50,6 +51,13 @@ export class AuditCommonService {
     }
     if (userId != null) {
       params = params.append('userId', userId);
+    }
+
+    if (dateFrom != null) {
+      params = params.append('dateFrom', this.datePipe.transform(dateFrom,"yyyy-MM-dd HH:mm:ss"));
+    }
+    if (dateTo!= null) {
+      params = params.append('dateTo', this.datePipe.transform(dateTo,"yyyy-MM-dd HH:mm:ss"));
     }
 
     return this.http.get<number>('api/uiaudit/getUIAuditCount', {params});

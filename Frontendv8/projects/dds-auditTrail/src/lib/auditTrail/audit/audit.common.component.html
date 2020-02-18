@@ -9,29 +9,32 @@
 
   <mat-form-field appearance="outline" fxFlex="25">
     <mat-label>Select user</mat-label>
-    <mat-select matInput name="status" [(ngModel)]="selectedUser" name="selectedUser" (selectionChange)="getUsers()">
+    <mat-select matInput name="status" [(ngModel)]="selectedUser" name="selectedUser">
       <mat-option *ngFor="let usr of userList" [value]="usr">{{usr.username}}</mat-option>
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" fxFlex="20">
-    <input matInput [matDatepicker]="fromPicker" placeholder="From date" [value]="dateFrom">
+  <mat-form-field appearance="outline" fxFlex="17">
+    <input matInput [matDatepicker]="fromPicker" placeholder="From date" [(ngModel)]="dateFrom">
     <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
     <mat-datepicker #fromPicker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" fxFlex="20">
-    <input matInput [matDatepicker]="toPicker" placeholder="To date" [value]="dateTo">
+  <mat-form-field appearance="outline" fxFlex="17">
+    <input matInput [matDatepicker]="toPicker" placeholder="To date" [(ngModel)]="dateTo">
     <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
     <mat-datepicker #toPicker></mat-datepicker>
   </mat-form-field>
 
-  <div fxFlex="10">
-    <button mat-icon-button (click)="filter()">
+  <div fxFlex="16">
+    <button mat-icon-button matTooltip="Filter the results" (click)="filter()">
       <i class="far fa-fw fa-filter"></i>
     </button>
-    <button mat-icon-button (click)="reset()">
+    <button mat-icon-button matTooltip="Remove all filters" (click)="reset()">
       <i class="far fa-fw fa-times"></i>
+    </button>
+    <button mat-icon-button matTooltip="Refresh" (click)="refresh()">
+      <i class="far fa-fw fa-sync"></i>
     </button>
   </div>
 

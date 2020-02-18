@@ -50,8 +50,6 @@ public class UIAuditEndpoint extends AbstractEndpoint {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         if (dateFrom != null) {
-            /*Date startDate = new Date(dateFrom);
-            timestampFrom = new Timestamp(startDate.getTime());*/
             Date parsedDateFrom = dateFormat.parse(dateFrom);
             timestampFrom = new Timestamp(parsedDateFrom.getTime());
         }
@@ -84,9 +82,26 @@ public class UIAuditEndpoint extends AbstractEndpoint {
     public Response getUIAuditCount(@Context SecurityContext sc,
                                   @QueryParam("userOrganisationId") String userOrganisationId,
                                   @QueryParam("organisationId") String organisationId,
-                                  @QueryParam("userId") String userId) throws Exception {
+                                  @QueryParam("userId") String userId,
+                                  @QueryParam("dateFrom") String dateFrom,
+                                  @QueryParam("dateTo") String dateTo) throws Exception {
 
-        Long count = new UIAuditJDBCDAL().getAuditCount(userOrganisationId, organisationId, userId);
+        Timestamp timestampFrom = null;
+        Timestamp timestampTo = null;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if (dateFrom != null) {
+            Date parsedDateFrom = dateFormat.parse(dateFrom);
+            timestampFrom = new Timestamp(parsedDateFrom.getTime());
+        }
+
+        if (dateTo != null) {
+            Date parsedDateTo = dateFormat.parse(dateTo);
+            timestampTo = new Timestamp(parsedDateTo.getTime());
+        }
+
+        Long count = new UIAuditJDBCDAL().getAuditCount(userOrganisationId, organisationId, userId, timestampFrom, timestampTo);
 
         return Response
                 .ok()

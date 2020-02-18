@@ -60,8 +60,7 @@ export class AuditCommonComponent implements OnInit, OnChanges {
   roleChanged() {
 
 
-    this.getAudit();
-    this.getAuditCount();
+    this.refresh();
     this.getOrganisations(this.userOrganisationId);
   }
 
@@ -79,6 +78,8 @@ export class AuditCommonComponent implements OnInit, OnChanges {
       if (this.selectedUser != null) {
         usrId = this.selectedUser.uuid;
       }
+      this.dateFrom.setHours(0,0,0,0);
+      this.dateTo.setHours(24, 0, 0, 0);
       fromDate = this.dateFrom;
       toDate = this.dateTo;
     }
@@ -99,11 +100,22 @@ export class AuditCommonComponent implements OnInit, OnChanges {
 
     let orgId = null;
     let usrId = null;
+    let fromDate = null;
+    let toDate = null
     if (this.filtered) {
-      orgId = this.selectedOrg.uuid;
-      usrId = this.selectedUser.uuid;
+      if (this.selectedOrg != null) {
+        orgId = this.selectedOrg.uuid;
+      }
+      if (this.selectedUser != null) {
+        usrId = this.selectedUser.uuid;
+      }
+      this.dateFrom.setHours(0,0,0,0);
+      this.dateTo.setHours(24, 0, 0, 0);
+      fromDate = this.dateFrom;
+      toDate = this.dateTo;
     }
-    this.auditService.getAuditCount(this.userOrganisationId, orgId, usrId)
+    console.log('getting count', fromDate);
+    this.auditService.getAuditCount(this.userOrganisationId, orgId, usrId, fromDate, toDate)
       .subscribe(
         (result) => {
           this.totalItems = result;
@@ -163,12 +175,19 @@ export class AuditCommonComponent implements OnInit, OnChanges {
     this.selectedOrg = null;
     this.selectedUser = null;
     this.filtered = false;
+
+    this.refresh();
   }
 
   filter() {
-
+    this.pageNumber = 1;
     this.filtered = true;
+  }
+
+  refresh() {
     this.getAudit();
+    this.getAuditCount();
   }
 
 }
+a
