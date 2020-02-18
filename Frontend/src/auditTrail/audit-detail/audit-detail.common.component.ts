@@ -169,6 +169,9 @@ export class AuditDetailCommonComponent implements OnInit {
               return dd.getDataSharingAgreementDisplayDetails();
           case "Region":
               return dd.getRegionDisplayDetails();
+          case "Organisation":
+          case "Service":
+              return dd.getOrganisationDisplayDetails();
           default:
               this.log.error("Unexpected item type: " + itemType);
       }

@@ -28,8 +28,6 @@ public class EntityNameGetter {
             case "SUBSCRIBER":
                 return getOrganisationNames(items);
             case "REGION":
-            case "PARENTREGION":
-            case "CHILDREGION":
                 return getRegionNames(items);
             case "PROJECT":
                 return getProjectNames(items);
