@@ -1,9 +1,7 @@
 package org.endeavourhealth.uiaudit.logic;
 
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityPurposeDAL;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.*;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.*;
-import org.hl7.fhir.instance.model.List_;
+import org.endeavourhealth.core.database.dal.usermanager.caching.*;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +58,10 @@ public class EntityNameGetter {
 
     private static List<String> getDataSetNames(List<String> items) throws Exception {
 
-        List<DatasetEntity> dpas = DataSetCache.getDataSetDetails(items);
+        List<DataSetEntity> dpas = DataSetCache.getDataSetDetails(items);
 
         Map<String, String> nameMap = dpas.stream()
-                .collect(Collectors.toMap(DatasetEntity::getUuid, DatasetEntity::getName));
+                .collect(Collectors.toMap(DataSetEntity::getUuid, DataSetEntity::getName));
 
         return getNamesFromMap(items, nameMap);
     }

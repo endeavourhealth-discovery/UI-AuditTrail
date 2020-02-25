@@ -1,7 +1,7 @@
 package org.endeavourhealth.uiaudit.endpoints;
 
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUser;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
 import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
 import org.endeavourhealth.uiaudit.logic.UIAuditLogic;
 import org.endeavourhealth.coreui.endpoints.AbstractEndpoint;

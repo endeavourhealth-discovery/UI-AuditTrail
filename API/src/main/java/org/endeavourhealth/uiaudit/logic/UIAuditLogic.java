@@ -3,16 +3,18 @@ package org.endeavourhealth.uiaudit.logic;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.endeavourhealth.core.database.dal.DalProvider;
+import org.endeavourhealth.core.database.dal.usermanager.ApplicationAccessProfileDalI;
+import org.endeavourhealth.core.database.dal.usermanager.ApplicationPolicyAttributeDalI;
+import org.endeavourhealth.core.database.dal.usermanager.DelegationRelationshipDalI;
+import org.endeavourhealth.core.database.dal.usermanager.UserProjectDalI;
+import org.endeavourhealth.core.database.dal.usermanager.caching.*;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.ProjectEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.*;
 import org.endeavourhealth.uiaudit.dal.UIAuditJDBCDAL;
 import org.endeavourhealth.uiaudit.models.UIAudit;
 import org.endeavourhealth.uiaudit.models.UIAuditSummary;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityApplicationPolicyAttributeDAL;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityDelegationRelationshipDAL;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserProjectDAL;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.*;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.*;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import javax.ws.rs.core.Response;
@@ -21,6 +23,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UIAuditLogic {
+    private static ApplicationPolicyAttributeDalI appPolicyAttributeRepository = DalProvider.factoryUMApplicationPolicyAttributeDal();
+    private static UserProjectDalI userProjectRepository = DalProvider.factoryUMUserProjectDal();
+    private static DelegationRelationshipDalI delegationRelationshipRepository = DalProvider.factoryUMDelegationRelationshipDal();
 
     public Response getAuditEntries(String userOrganisationId, Integer pageNumber, Integer pageSize,
                                      String organisationId, String userId,
@@ -103,11 +108,11 @@ public class UIAuditLogic {
         JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
             title = "Project added";
-            userProject = new SecurityUserProjectDAL().getUserProject(audit.getItemAfter());
+            userProject = userProjectRepository.getUserProject(audit.getItemAfter());
             afterJson = generateProjectAuditJson(userProject);
         } else {
             title = "Project deleted";
-            userProject = new SecurityUserProjectDAL().getUserProject(audit.getItemBefore());
+            userProject = userProjectRepository.getUserProject(audit.getItemBefore());
             beforeJson = generateProjectAuditJson(userProject);
         }
 
@@ -158,17 +163,17 @@ public class UIAuditLogic {
         JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
             title = "Delegation relationship added";
-            relationshipAfter = new SecurityDelegationRelationshipDAL().getDelegationRelationship(audit.getItemAfter());
+            relationshipAfter = delegationRelationshipRepository.getDelegationRelationship(audit.getItemAfter());
             afterJson = generateDelegationRelationshipAuditJson(relationshipAfter);
         } else if (audit.getAuditType() == 1) {
             title = "Delegation relationship edited";
-            relationshipBefore = new SecurityDelegationRelationshipDAL().getDelegationRelationship(audit.getItemBefore());
+            relationshipBefore = delegationRelationshipRepository.getDelegationRelationship(audit.getItemBefore());
             beforeJson = generateDelegationRelationshipAuditJson(relationshipBefore);
-            relationshipAfter = new SecurityDelegationRelationshipDAL().getDelegationRelationship(audit.getItemAfter());
+            relationshipAfter = delegationRelationshipRepository.getDelegationRelationship(audit.getItemAfter());
             afterJson = generateDelegationRelationshipAuditJson(relationshipAfter);
         } else {
             title = "Delegation relationship deleted";
-            relationshipBefore = new SecurityDelegationRelationshipDAL().getDelegationRelationship(audit.getItemBefore());
+            relationshipBefore = delegationRelationshipRepository.getDelegationRelationship(audit.getItemBefore());
             beforeJson = generateDelegationRelationshipAuditJson(relationshipBefore);
         }
 
@@ -323,17 +328,17 @@ public class UIAuditLogic {
         JsonNode afterJson = null;
         if (audit.getAuditType() == 0) {
             title = "Application policy attribute added";
-            accessProfileAfter = new SecurityApplicationPolicyAttributeDAL().getRoleTypeAccessProfile(audit.getItemAfter());
+            accessProfileAfter = appPolicyAttributeRepository.getRoleTypeAccessProfile(audit.getItemAfter());
             afterJson = generateApplicationPolicyAttributeAuditJson(accessProfileAfter);
         } else if (audit.getAuditType() == 1) {
             title = "Application policy attribute edited";
-            accessProfileBefore = new SecurityApplicationPolicyAttributeDAL().getRoleTypeAccessProfile(audit.getItemBefore());
+            accessProfileBefore = appPolicyAttributeRepository.getRoleTypeAccessProfile(audit.getItemBefore());
             beforeJson = generateApplicationPolicyAttributeAuditJson(accessProfileBefore);
-            accessProfileAfter = new SecurityApplicationPolicyAttributeDAL().getRoleTypeAccessProfile(audit.getItemAfter());
+            accessProfileAfter = appPolicyAttributeRepository.getRoleTypeAccessProfile(audit.getItemAfter());
             afterJson = generateApplicationPolicyAttributeAuditJson(accessProfileAfter);
         } else {
             title = "Application policy attribute deleted";
-            accessProfileBefore = new SecurityApplicationPolicyAttributeDAL().getRoleTypeAccessProfile(audit.getItemBefore());
+            accessProfileBefore = appPolicyAttributeRepository.getRoleTypeAccessProfile(audit.getItemBefore());
             beforeJson = generateApplicationPolicyAttributeAuditJson(accessProfileBefore);
         }
 

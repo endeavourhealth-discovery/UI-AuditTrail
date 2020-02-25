@@ -1,16 +1,17 @@
 package org.endeavourhealth.uiaudit.dal;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
+import org.endeavourhealth.core.database.dal.DalProvider;
+import org.endeavourhealth.core.database.dal.usermanager.DelegationRelationshipDalI;
+import org.endeavourhealth.core.database.dal.usermanager.caching.OrganisationCache;
+import org.endeavourhealth.core.database.dal.usermanager.caching.UserCache;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUser;
+import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.DelegationRelationshipEntity;
+import org.endeavourhealth.core.database.rdbms.usermanager.models.UserProjectEntity;
 import org.endeavourhealth.uiaudit.enums.AuditAction;
 import org.endeavourhealth.uiaudit.enums.ItemType;
 import org.endeavourhealth.uiaudit.models.UIAudit;
-import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityDelegationRelationshipDAL;
-import org.endeavourhealth.common.security.usermanagermodel.models.database.DelegationRelationshipEntity;
 import org.endeavourhealth.uiaudit.models.UIAuditSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -369,12 +370,13 @@ public class UIAuditJDBCDAL {
     }
 
     private List<String> getDelegatedOrganisations(String userOrganisationId) throws Exception {
+        DelegationRelationshipDalI relationshipRepository = DalProvider.factoryUMDelegationRelationshipDal();
 
         List<String> filterOrgs = new ArrayList<String>();
         // get a list of all delegated orgs that this user has access to view uiaudit trail for
         // if userOrganisationId is null, the user must be in god mode so don't limit by organisations
         if (userOrganisationId != null) {
-            List<DelegationRelationshipEntity> relationships = new SecurityDelegationRelationshipDAL().getDelegatedOrganisations(userOrganisationId);
+            List<DelegationRelationshipEntity> relationships = relationshipRepository.getDelegatedOrganisations(userOrganisationId);
 
             filterOrgs = relationships.stream()
                     .map(DelegationRelationshipEntity::getChildUuid)

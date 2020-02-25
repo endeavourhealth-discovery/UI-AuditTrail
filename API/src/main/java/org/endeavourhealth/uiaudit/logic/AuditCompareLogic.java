@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonPurpose;
+import org.endeavourhealth.core.database.dal.datasharingmanager.models.JsonPurpose;
 import org.endeavourhealth.uiaudit.dal.DALHelper;
 import org.endeavourhealth.uiaudit.models.AuditDifference;
 
