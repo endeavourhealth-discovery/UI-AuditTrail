@@ -16,9 +16,13 @@ export class AuditDetailCommonComponent implements OnInit {
   displayItems: any;
   changeLinkedItems: any;
   dataSource: any;
+  linkDataSource: any;
+  populatedLinkedItems: any[] = [];
 
   propertiesToShow: string[] = ['label'];
-  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+  linkPropertiesToShow: string[] = ['linkLabel', 'linkDetails'];
+  @ViewChild('mainAudit', { static: false }) mainTable: MatTable<any>;
+  @ViewChild('linkAudit', { static: false }) linkTable: MatTable<any>;
 
 
   constructor(
@@ -32,14 +36,12 @@ export class AuditDetailCommonComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.displayItems = this.getDetailsToShow(this.data.itemType);
     this.changeLinkedItems = this.getDetailsToShow('Linked Items');
     this.getDetails();
 
     this.dataSource = new MatTableDataSource(this.displayItems);
-    if (this.table) {
-      this.table.renderRows();
-    }
   }
 
   getDetails() {
@@ -48,6 +50,14 @@ export class AuditDetailCommonComponent implements OnInit {
       .subscribe(
         (result) => {
           this.auditDetails = result;
+
+          for (let link of this.changeLinkedItems) {
+            if (this.auditDetails[link.label]) {
+              this.populatedLinkedItems.push(link);
+            }
+          }
+          this.linkDataSource = new MatTableDataSource(this.populatedLinkedItems);
+
           this.getLinkedItems();
 
           if (this.auditDetails.before) {

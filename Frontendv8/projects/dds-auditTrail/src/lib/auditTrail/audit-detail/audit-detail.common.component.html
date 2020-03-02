@@ -6,7 +6,7 @@
 
       <h4>{{auditDetails?.title}}</h4>
 
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-compact" fxFlex="100" fxFill matSort>
+      <table #mainAudit mat-table [dataSource]="dataSource" class="mat-elevation-z8 mat-table-compact" fxFlex="100" fxFill matSort>
 
         <ng-container matColumnDef="label">
           <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
@@ -25,6 +25,21 @@
 
         <tr mat-header-row *matHeaderRowDef="propertiesToShow"></tr>
         <tr mat-row *matRowDef="let row; columns: propertiesToShow;"></tr>
+      </table>
+
+      <table #linkAudit mat-table [dataSource]="linkDataSource" class="mat-elevation-z8 mat-table-compact" fxFlex="100" fxFill>
+
+        <ng-container matColumnDef="linkLabel">
+          <th mat-header-cell *matHeaderCellDef> label link</th>
+          <td mat-cell *matCellDef="let element" [hidden]="!auditDetails[element.label]"> {{element.label}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="linkDetails">
+          <th mat-header-cell *matHeaderCellDef> linkedItem</th>
+          <td mat-cell *matCellDef="let element" [hidden]="!auditDetails[element.label]"> {{auditDetails[element.label]}}</td>
+        </ng-container>
+
+        <tr mat-row *matRowDef="let row; columns: linkPropertiesToShow;"></tr>
       </table>
     </div>
   </div>
