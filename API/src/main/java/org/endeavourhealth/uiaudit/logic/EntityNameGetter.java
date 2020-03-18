@@ -4,6 +4,7 @@ import org.endeavourhealth.core.database.dal.usermanager.caching.*;
 import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,109 +12,115 @@ import java.util.stream.Collectors;
 public class EntityNameGetter {
 
     public static List<String> replaceUUIDsWithName(String type, List<String> items) throws Exception {
+
+        Map<String, String> nameMap = replaceUUIDsWithNameMap(type, items);
+
+        return getNamesFromMap(items, nameMap);
+    }
+
+    public static Map<String, String> replaceUUIDsWithNameMap(String type, List<String> items) throws Exception {
+
+        Map<String, String> nameMap = new HashMap<>();
+
         switch (type) {
             case "DATAPROCESSINGAGREEMENT":
-                return getDPANames(items);
+                return getDPAMap(items);
             case "DATASHARINGAGREEMENT":
-                return getDSANames(items);
+                return getDSAMap(items);
             case "DATASET":
-                return getDataSetNames(items);
+                return getDataSetMap(items);
             case "COHORT":
-                return getCohortNames(items);
+                return getCohortMaps(items);
             case "ORGANISATION":
             case "SERVICE":
             case "PUBLISHER":
             case "SUBSCRIBER":
-                return getOrganisationNames(items);
+                return getOrganisationMap(items);
             case "REGION":
-                return getRegionNames(items);
+                return getRegionMap(items);
             case "PROJECT":
-                return getProjectNames(items);
+                return getProjectMap(items);
             case "DOCUMENT":
-                return getDocumentNames(items);
+                return getDocumentMap(items);
             default:
                 throw new Exception("Unknown type : " + type);
+
         }
     }
 
-    private static List<String> getDPANames(List<String> items) throws Exception {
-
+    private static Map<String, String> getDPAMap(List<String> items) throws Exception {
         List<DataProcessingAgreementEntity> dpas = DataProcessingAgreementCache.getDPADetails(items);
 
-        Map<String, String> nameMap = dpas.stream()
+        return dpas.stream()
                 .collect(Collectors.toMap(DataProcessingAgreementEntity::getUuid, DataProcessingAgreementEntity::getName));
 
-        return getNamesFromMap(items, nameMap);
     }
 
-    private static List<String> getDSANames(List<String> items) throws Exception {
-
+    private static Map<String, String> getDSAMap(List<String> items) throws Exception {
         List<DataSharingAgreementEntity> dpas = DataSharingAgreementCache.getDSADetails(items);
 
-        Map<String, String> nameMap = dpas.stream()
+        return dpas.stream()
                 .collect(Collectors.toMap(DataSharingAgreementEntity::getUuid, DataSharingAgreementEntity::getName));
 
-        return getNamesFromMap(items, nameMap);
     }
 
-    private static List<String> getDataSetNames(List<String> items) throws Exception {
+    private static Map<String, String> getDataSetMap(List<String> items) throws Exception {
 
         List<DataSetEntity> dpas = DataSetCache.getDataSetDetails(items);
 
-        Map<String, String> nameMap = dpas.stream()
+        return dpas.stream()
                 .collect(Collectors.toMap(DataSetEntity::getUuid, DataSetEntity::getName));
 
-        return getNamesFromMap(items, nameMap);
     }
 
-    private static List<String> getCohortNames(List<String> items) throws Exception {
+    private static Map<String, String> getCohortMaps(List<String> items) throws Exception {
 
         List<CohortEntity> dpas = CohortCache.getCohortDetails(items);
 
-        Map<String, String> nameMap = dpas.stream()
+        return dpas.stream()
                 .collect(Collectors.toMap(CohortEntity::getUuid, CohortEntity::getName));
 
-        return getNamesFromMap(items, nameMap);
     }
 
-    private static List<String> getOrganisationNames(List<String> items) throws Exception {
+    private static Map<String, String> getOrganisationMap(List<String> items) throws Exception {
 
         List<OrganisationEntity> orgs = OrganisationCache.getOrganisationDetails(items);
 
-        Map<String, String> nameMap = orgs.stream()
-                .collect(Collectors.toMap(OrganisationEntity::getUuid, OrganisationEntity::getName));
+        Map<String, String> orgMap = new HashMap<>();
 
-        return getNamesFromMap(items, nameMap);
+        for (OrganisationEntity org : orgs) {
+            orgMap.put(org.getUuid(), org.getName() + " (" + org.getOdsCode() + ")");
+        }
+
+        return orgMap;
+
     }
 
-    private static List<String> getRegionNames(List<String> items) throws Exception {
+    private static Map<String, String> getRegionMap(List<String> items) throws Exception {
 
         List<RegionEntity> orgs = RegionCache.getRegionDetails(items);
 
-        Map<String, String> nameMap = orgs.stream()
+        return orgs.stream()
                 .collect(Collectors.toMap(RegionEntity::getUuid, RegionEntity::getName));
 
-        return getNamesFromMap(items, nameMap);
     }
 
-    private static List<String> getProjectNames(List<String> items) throws Exception {
+    private static Map<String, String> getProjectMap(List<String> items) throws Exception {
 
         List<ProjectEntity> orgs = ProjectCache.getProjectDetails(items);
 
-        Map<String, String> nameMap = orgs.stream()
+        return orgs.stream()
                 .collect(Collectors.toMap(ProjectEntity::getUuid, ProjectEntity::getName));
 
-        return getNamesFromMap(items, nameMap);
     }
 
-    private static List<String> getDocumentNames(List<String> items) throws Exception {
+    private static Map<String, String> getDocumentMap(List<String> items) throws Exception {
 
         List<DocumentationEntity> orgs = DocumentationCache.getDocumentDetails(items);
 
-        Map<String, String> nameMap = orgs.stream()
+        return orgs.stream()
                 .collect(Collectors.toMap(DocumentationEntity::getUuid, DocumentationEntity::getTitle));
 
-        return getNamesFromMap(items, nameMap);
     }
 
     private static List<String> getNamesFromMap(List<String> items, Map<String, String> nameMap) throws Exception {
