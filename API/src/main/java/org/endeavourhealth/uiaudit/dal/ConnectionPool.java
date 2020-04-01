@@ -50,11 +50,36 @@ public class ConnectionPool extends GenericCache<Connection> {
     @Override
     protected Connection create() {
         try {
+
+            String url;
+            String user;
+            String pass;
+            String driver;
             JsonNode json = ConfigManager.getConfigurationAsJson("database");
-            String url = json.get("url").asText();
-            String user = json.get("username").asText();
-            String pass = json.get("password").asText();
-            String driver = json.get("class") == null ? null : json.get("class").asText();
+
+            if (json != null) {
+                url = json.get("url").asText();
+                user = json.get("username").asText();
+                pass = json.get("password").asText();
+                driver = json.get("class") == null ? null : json.get("class").asText();
+            } else {
+                // get new style of config
+
+                String appId = ConfigManager.getAppId();
+
+                String dbConnectionConfigItem = "db_" + appId.replace("-", "_");
+
+                json = ConfigManager.getConfigurationAsJson(dbConnectionConfigItem, "global");
+
+                url = json.get("url").asText();
+                driver = json.get("class") == null ? null : json.get("class").asText();
+
+                json = ConfigManager.getConfigurationAsJson("db_credentials");
+
+                user = json.get("username").asText();
+                pass = json.get("password").asText();
+
+            }
 
             if (driver != null && !driver.isEmpty())
                 Class.forName(driver);
