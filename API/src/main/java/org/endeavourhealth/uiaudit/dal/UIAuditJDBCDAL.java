@@ -1,11 +1,13 @@
 package org.endeavourhealth.uiaudit.dal;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.endeavourhealth.common.config.ConfigManager;
 import org.endeavourhealth.core.database.dal.DalProvider;
 import org.endeavourhealth.core.database.dal.usermanager.DelegationRelationshipDalI;
 import org.endeavourhealth.core.database.dal.usermanager.caching.OrganisationCache;
 import org.endeavourhealth.core.database.dal.usermanager.caching.UserCache;
 import org.endeavourhealth.core.database.dal.usermanager.models.JsonUser;
+import org.endeavourhealth.core.database.rdbms.ConnectionManager;
 import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
 import org.endeavourhealth.core.database.rdbms.usermanager.models.DelegationRelationshipEntity;
 import org.endeavourhealth.core.database.rdbms.usermanager.models.UserProjectEntity;
@@ -85,7 +87,7 @@ public class UIAuditJDBCDAL {
 
         sql += orderby;
 
-        Connection conn = ConnectionPool.getInstance().pop();
+        Connection conn = createConnection();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
             if (!filterOrgs.isEmpty()) {
@@ -146,7 +148,7 @@ public class UIAuditJDBCDAL {
             return auditSummaries;
 
         } finally {
-            ConnectionPool.getInstance().push(conn);
+            conn.close();
         }
 
     }
@@ -196,7 +198,7 @@ public class UIAuditJDBCDAL {
             whereAnd = " and ";
         }
 
-        Connection conn = ConnectionPool.getInstance().pop();
+        Connection conn = createConnection();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 
@@ -229,7 +231,7 @@ public class UIAuditJDBCDAL {
             return count;
 
         } finally {
-            ConnectionPool.getInstance().push(conn);
+            conn.close();
         }
     }
 
@@ -257,7 +259,7 @@ public class UIAuditJDBCDAL {
             }
         }
 
-        Connection conn = ConnectionPool.getInstance().pop();
+        Connection conn = createConnection();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 
@@ -280,7 +282,7 @@ public class UIAuditJDBCDAL {
             return userList;
 
         } finally {
-            ConnectionPool.getInstance().push(conn);
+            conn.close();
         }
     }
 
@@ -302,7 +304,7 @@ public class UIAuditJDBCDAL {
         String sql = "select distinct organisation_id " +
                 " from audit a ";
 
-        Connection conn = ConnectionPool.getInstance().pop();
+        Connection conn = createConnection();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -318,7 +320,7 @@ public class UIAuditJDBCDAL {
             return orgList;
 
         } finally {
-            ConnectionPool.getInstance().push(conn);
+            conn.close();
         }
     }
 
@@ -339,7 +341,7 @@ public class UIAuditJDBCDAL {
                 " from audit a " +
                 " where a.id = ?";
 
-        Connection conn = ConnectionPool.getInstance().pop();
+        Connection conn = createConnection();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 
@@ -365,7 +367,7 @@ public class UIAuditJDBCDAL {
             return auditDetail;
 
         } finally {
-            ConnectionPool.getInstance().push(conn);
+            conn.close();
         }
     }
 
@@ -402,7 +404,7 @@ public class UIAuditJDBCDAL {
                 " item_after, audit_json, user_id, organisation_id, project_id) " +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
-        Connection conn = ConnectionPool.getInstance().pop();
+        Connection conn = createConnection();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 
@@ -422,7 +424,7 @@ public class UIAuditJDBCDAL {
         } catch (Exception e) {
             throw e;
         } finally {
-            ConnectionPool.getInstance().push(conn);
+            conn.close();
         }
     }
 
@@ -437,7 +439,7 @@ public class UIAuditJDBCDAL {
 
         String auditJson = null;
 
-        Connection conn = ConnectionPool.getInstance().pop();
+        Connection conn = createConnection();
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 
@@ -454,7 +456,25 @@ public class UIAuditJDBCDAL {
 
             statement.execute();
         } finally {
-            ConnectionPool.getInstance().push(conn);
+            conn.close();
         }
+    }
+
+    private Connection createConnection()  {
+
+        try {
+            String appId = ConfigManager.getAppId();
+
+            switch (appId) {
+                case "data-sharing-manager"  :   return ConnectionManager.getDataSharingManagerConnection();
+                case "user-manager"          :   return ConnectionManager.getUserManagerConnection();
+
+                default: throw new IllegalArgumentException("appId not recognised : " + appId);
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error getting connection", e);
+        }
+        return null;
     }
 }
