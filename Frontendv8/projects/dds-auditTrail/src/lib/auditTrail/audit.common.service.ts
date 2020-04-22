@@ -3,8 +3,8 @@ import {AuditSummary} from "./models/AuditSummary";
 import {DatePipe} from "@angular/common";
 import {User} from "./models/User";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Organisation} from "dds-angular8/lib/user-manager/models/Organisation";
 import {Observable} from "rxjs/index";
+import {Organisation} from "dds-angular8/user-manager/models/Organisation";
 
 @Injectable()
 export class AuditCommonService {

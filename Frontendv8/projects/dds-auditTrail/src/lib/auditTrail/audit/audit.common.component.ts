@@ -4,9 +4,9 @@ import {AuditCommonService} from "../audit.common.service";
 import {AuditDetailCommonComponent} from "../audit-detail/audit-detail.common.component";
 import {User} from "../models/User";
 import {LoggerService} from "dds-angular8";
-import {Organisation} from "dds-angular8/lib/user-manager/models/Organisation";
-import {UserProject} from "dds-angular8/lib/user-manager/models/UserProject";
 import {MatDialog} from "@angular/material";
+import {Organisation} from "dds-angular8/user-manager/models/Organisation";
+import {UserProject} from "dds-angular8/user-manager";
 
 @Component({
   selector: 'app-audit-common',
