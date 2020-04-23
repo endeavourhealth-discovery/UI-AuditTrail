@@ -405,6 +405,7 @@ public class UIAuditJDBCDAL {
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
         Connection conn = createConnection();
+        conn.setAutoCommit(true);
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 
@@ -440,6 +441,7 @@ public class UIAuditJDBCDAL {
         String auditJson = null;
 
         Connection conn = createConnection();
+        conn.setAutoCommit(true);
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             int i = 1;
 

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.endeavourhealth.core.database.dal.DalProvider;
-import org.endeavourhealth.core.database.dal.usermanager.ApplicationAccessProfileDalI;
 import org.endeavourhealth.core.database.dal.usermanager.ApplicationPolicyAttributeDalI;
 import org.endeavourhealth.core.database.dal.usermanager.DelegationRelationshipDalI;
 import org.endeavourhealth.core.database.dal.usermanager.UserProjectDalI;
 import org.endeavourhealth.core.database.dal.usermanager.caching.*;
+import org.endeavourhealth.core.database.dal.usermanager.models.JsonUser;
 import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.OrganisationEntity;
 import org.endeavourhealth.core.database.rdbms.datasharingmanager.models.ProjectEntity;
 import org.endeavourhealth.core.database.rdbms.usermanager.models.*;
@@ -75,7 +75,14 @@ public class UIAuditLogic {
 
     }
 
+    public Response getUserDetails(String userId) throws Exception {
+        JsonUser user = new JsonUser(UserCache.getUserDetails(userId));
 
+        return Response
+                .ok()
+                .entity(user)
+                .build();
+    }
 
     public Response getAuditDetails(String auditId) throws Exception {
         UIAudit auditEntity = new UIAuditJDBCDAL().getAuditDetail(auditId);

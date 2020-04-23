@@ -75,6 +75,21 @@ public class UIAuditEndpoint extends AbstractEndpoint {
 
     }
 
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getUserDetails")
+    public Response getUserDetails(@Context SecurityContext sc,
+                                     @QueryParam("userId") String userId) throws Exception {
+
+        super.setLogbackMarkers(sc);
+
+        return new UIAuditLogic().getUserDetails(userId);
+
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

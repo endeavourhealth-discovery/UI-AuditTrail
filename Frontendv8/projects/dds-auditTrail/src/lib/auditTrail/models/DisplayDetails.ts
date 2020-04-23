@@ -186,9 +186,9 @@ export class DisplayDetails {
     return [
       { label: 'Id', property: 'uuid'},
       { label: 'Name', property: 'name'},
-      { label: 'Lead user', property: 'leadUser'},
-      { label: 'Technical lead user', property: 'technicalLeadUser'},
-      { label: 'Technical lead user', property: 'consentModelId', link: 'consents'},
+      { label: 'Lead user', property: 'leadUser', user: true},
+      { label: 'Technical lead user', property: 'technicalLeadUser', user: true},
+      { label: 'Consent model', property: 'consentModelId', link: 'consents'},
       { label: 'De-identification level', property: 'deidentificationLevel', link: 'deidentificationLevel'},
       { label: 'Project type', property: 'projectTypeId', link: 'projectTypes'},
       { label: 'Security infrastructure', property: 'securityInfrastructureId', link: 'securityInfrastructures'},
@@ -203,7 +203,10 @@ export class DisplayDetails {
       { label: 'Flow schedule', property: 'flowScheduleId', link: 'flowScheduleIds'},
       { label: 'Project status', property: 'projectStatusId', link: 'status'},
       { label: 'Start date', property: 'startDate'},
-      { label: 'End date', property: 'endDate'}
+      { label: 'End date', property: 'endDate'},
+      { label: 'Configuration name', property: 'configName'},
+      { label: 'Authorised by', property: 'authorisedBy', user: true},
+      { label: 'Date authorised', property: 'authorisedDate'}
     ]
   }
   getDataProcessingAgreementDisplayDetails(): any[] {

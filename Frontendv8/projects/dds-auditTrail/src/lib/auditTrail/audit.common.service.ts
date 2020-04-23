@@ -70,6 +70,13 @@ export class AuditCommonService {
     return <any>this.http.get('api/uiaudit/getUIAuditDetail', {params});
   }
 
+  getUserDetails(userId: string): Observable<User> {
+
+    let params = new HttpParams();
+    params = params.append('userId', userId);
+    return <any>this.http.get('api/uiaudit/getUserDetails', {params});
+  }
+
   getUsers(organisationId: string = null): Observable<User[]> {
 
     var url = 'api/uiaudit/getUIAuditUsers';

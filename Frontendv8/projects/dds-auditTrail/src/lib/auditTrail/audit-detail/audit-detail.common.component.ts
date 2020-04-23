@@ -86,6 +86,34 @@ export class AuditDetailCommonComponent implements OnInit {
           this.auditDetails.before[det.property] = this.itemLinkageService.getLinkedItem(+this.auditDetails.before[det.property], det.link);
         }
       }
+
+      if (det.user) {
+        if (this.auditDetails.after && this.auditDetails.after[det.property]) {
+          this.auditService.getUserDetails(this.auditDetails.after[det.property])
+            .subscribe(
+              (result) => {
+                this.auditDetails.after[det.property] =
+                  result.forename + ' '  + result.surname + ' (' + result.email + ')';
+              },
+              (error) => {
+                this.log.error('Error loading audit data');
+              }
+            );
+        }
+
+        if (this.auditDetails.before && this.auditDetails.before[det.property]) {
+          this.auditService.getUserDetails(this.auditDetails.before[det.property])
+            .subscribe(
+              (result) => {
+                this.auditDetails.before[det.property] =
+                  result.forename + ' '  + result.surname + ' (' + result.email + ')';
+              },
+              (error) => {
+                this.log.error('Error loading user data');
+              }
+            );
+        }
+      }
     }
   }
 
